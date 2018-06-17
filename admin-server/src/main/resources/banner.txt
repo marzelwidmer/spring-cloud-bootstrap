@@ -1,0 +1,12 @@
+${AnsiColor.BRIGHT_GREEN}
+,--. ,--.                          ,-----.          ,--.
+|  .'   /  ,---.   ,---.   ,---.  '  .--./  ,--,--. |  | ,--,--,--.
+|  .   '  | .-. : | .-. : | .-. | |  |     ' ,-.  | |  | |        |
+|  |\   \ \   --. \   --. | '-' ' '  '--'\ \ '-'  | |  | |  |  |  |
+`--' '--'  `----'  `----' |  |-'   `-----'  `--`--' `--' `--`--`--'
+                          `--'
+${AnsiColor.BRIGHT_MAGENTA} profile: ${spring.profiles.active}
+${AnsiColor.BRIGHT_MAGENTA} port: ${server.port}
+
+
+

@@ -1,0 +1,19 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: admin-server
+  security:
+    user:
+      name: admin
+      password: password
+  boot:
+    admin:
+      discovery:
+        ignored-services: admin-server
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:password@localhost:8761/eureka/

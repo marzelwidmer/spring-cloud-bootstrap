@@ -1,0 +1,17 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: bar-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:password@localhost:8761/eureka/
+
+management:
+  endpoints:
+    web.exposure.include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
