@@ -8,7 +8,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Spring Cloud Admin Server</name>
+    <name>Spring Cloud - Admin Server</name>
     <description>Spring Cloud Admin Server</description>
 
     <parent>
