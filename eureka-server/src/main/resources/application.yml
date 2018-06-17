@@ -6,8 +6,8 @@ spring:
     name: eureka-server
   security:
     user:
-      name: eureka
-      password: password
+      name: "eureka"
+      password: "password"
 
 # by default every Eureka Server is also an Eureka Client and requires (at least one) service URL to locate a peer.
 eureka:

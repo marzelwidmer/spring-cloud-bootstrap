@@ -6,8 +6,8 @@ spring:
     name: admin-server
   security:
     user:
-      name: admin
-      password: password
+      name: "admin"
+      password: "password"
   boot:
     admin:
       discovery:
