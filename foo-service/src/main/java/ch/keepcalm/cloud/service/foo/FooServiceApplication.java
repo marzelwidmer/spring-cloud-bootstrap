@@ -58,9 +58,6 @@ public class FooServiceApplication {
 
 }
 
-
-
-
 @RestController
 class GreetingController {
 
@@ -84,7 +81,9 @@ class GreetingController {
 
     @GetMapping("/greetingbar")
     public ResponseEntity<String> fooMeetBar() {
-        return new ResponseEntity<>("foo " + barClient.getBar(), HttpStatus.OK);
+        Greeting bar = barClient.getBar();
+        System.out.println(bar.getContent());
+        return new ResponseEntity<>(bar.getContent(), HttpStatus.OK);
     }
 
 }
@@ -106,13 +105,14 @@ class Greeting extends ResourceSupport {
 @Component
 class BarClient {
 
+    @LoadBalanced
     private final RestTemplate restTemplate;
 
     public BarClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public String getBar() {
-        return restTemplate.getForObject("http://bar-service" + "/greeting", String.class);
+    public Greeting getBar() {
+        return restTemplate.getForObject("http://bar-service" + "/greeting", Greeting.class);
     }
 }
