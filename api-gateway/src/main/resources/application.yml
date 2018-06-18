@@ -1,22 +1,23 @@
 server:
-  port: 8081
+  port: 8080
 
 spring:
+  cloud:
+    gateway:
+      routes:
+      - id: google_route
+        uri: http://www.google.com/
+        predicates:
+        - Path=/google
   application:
-    name: foo-service
+    name: gateway-service
   security:
     user:
-      name: "foo"
+      name: "gateway"
       password: "password"
   profiles:
     active:
       - unsecure
-  # Cloud
-  cloud:
-    hypermedia:
-      refresh.initial-delay: 100
-      refresh.fixed-delay: 500
-
 
 # When using Spring Cloud Discovery, you must be aware that anybody who can query your service registry can obtain the credentials.
 eureka:
@@ -38,6 +39,3 @@ management:
     health:
       show-details: ALWAYS
 
-# Logging
-logging.level:
-  org.springframework.cloud.client.hypermedia: DEBUG
