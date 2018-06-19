@@ -22,6 +22,7 @@ spring:
         - Path=/bar/**
         filters:
         - RewritePath=/bar/(?<path>.*), /$\{path}
+
   security:
     user:
       name: "gateway"
