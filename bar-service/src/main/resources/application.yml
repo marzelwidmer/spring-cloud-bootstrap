@@ -1,10 +1,5 @@
 spring:
   profiles:
-    active:
-      - unsecure
----
-spring:
-  profiles:
     - native
   profiles.include:
       - unsecure
@@ -17,9 +12,6 @@ spring:
     hypermedia:
       refresh.initial-delay: 100
       refresh.fixed-delay: 500
-
-server:
-  port: 8082
 
 # When using Spring Cloud Discovery, you must be aware that anybody who can query your service registry can obtain the credentials.
 eureka:
@@ -47,3 +39,6 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
   level:
     org.springframework.cloud.client.hypermedia: DEBUG
+
+server:
+  port: 8082

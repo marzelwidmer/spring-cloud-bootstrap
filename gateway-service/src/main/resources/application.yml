@@ -1,18 +1,33 @@
 spring:
   profiles:
     - native
-  profiles.include:
-      - unsecure
+
   security:
     user:
-      name: "foo"
+      name: "gateway"
       password: "password"
 
-  # Cloud
   cloud:
-    hypermedia:
-      refresh.initial-delay: 100
-      refresh.fixed-delay: 500
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      # foo-service
+      - id: foo-service
+        uri: lb://foo-service
+        predicates:
+        - Path=/foo/**
+        filters:
+        - RewritePath=/foo/(?<path>.*), /$\{path}
+     # bar-service
+      - id: bar-service
+        uri: lb://bar-service
+        predicates:
+        - Path=/bar/**
+        filters:
+        - RewritePath=/bar/(?<path>.*), /$\{path}
+
 
 # When using Spring Cloud Discovery, you must be aware that anybody who can query your service registry can obtain the credentials.
 eureka:
@@ -24,7 +39,6 @@ eureka:
   client:
     service-url:
       defaultZone: http://eureka:password@localhost:8761/eureka/
-
 
 # If Spring Security is on the classpath and no other WebSecurityConfigurerAdapter is present, the actuators are secured by Spring Boot auto-config.
 management:
@@ -38,8 +52,6 @@ management:
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
-  level:
-    org.springframework.cloud.client.hypermedia: DEBUG
 
 server:
-  port: 8081
+  port: 8080

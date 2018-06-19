@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: discovery-service
+  cloud:
+    config:
+      uri: http://config:password@localhost:8088
+
+---
+spring:
+  profiles:
+    - native
+  cloud:
+    config:
+      enabled: false
+
