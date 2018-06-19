@@ -1,7 +1,14 @@
-server:
-  port: 8080
-
 spring:
+  profiles:
+    active:
+      - unsecure
+
+---
+spring:
+  profiles:
+    - native
+  profiles.include:
+      - unsecure
   cloud:
     gateway:
       discovery:
@@ -26,9 +33,9 @@ spring:
     user:
       name: "gateway"
       password: "password"
-  profiles:
-    active:
-      - unsecure
+
+server:
+  port: 8080
 
 # When using Spring Cloud Discovery, you must be aware that anybody who can query your service registry can obtain the credentials.
 eureka:

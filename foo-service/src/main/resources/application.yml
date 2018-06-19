@@ -1,20 +1,27 @@
-server:
-  port: 8081
-
 spring:
+  profiles:
+    active:
+      - unsecure
+
+---
+spring:
+  profiles:
+    - native
+  profiles.include:
+      - unsecure
   security:
     user:
       name: "foo"
       password: "password"
-  profiles:
-    active:
-      - unsecure
+
   # Cloud
   cloud:
     hypermedia:
       refresh.initial-delay: 100
       refresh.fixed-delay: 500
 
+server:
+  port: 8081
 
 # When using Spring Cloud Discovery, you must be aware that anybody who can query your service registry can obtain the credentials.
 eureka:

@@ -1,11 +1,19 @@
-server:
-  port: 8761
-
 spring:
+  profiles:
+    active:
+      - default
+
+---
+spring:
+  profiles:
+    - native
   security:
     user:
       name: "eureka"
       password: "password"
+
+server:
+  port: 8761
 
 # by default every Eureka Server is also an Eureka Client and requires (at least one) service URL to locate a peer.
 eureka:
