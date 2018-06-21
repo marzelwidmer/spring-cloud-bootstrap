@@ -8,8 +8,8 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Spring Cloud - Bar Service</name>
-	<description>Spring Cloud BAr Service</description>
+	<name>Bar Service</name>
+	<description>Spring Cloud Bar Service</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
