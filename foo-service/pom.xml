@@ -8,7 +8,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Spring Cloud - Foo Service</name>
+	<name>Foo Service</name>
 	<description>Spring Cloud Foo Service</description>
 
 	<parent>
