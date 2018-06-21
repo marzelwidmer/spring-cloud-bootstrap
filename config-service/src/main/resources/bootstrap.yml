@@ -1,16 +1,35 @@
 spring:
   application:
     name: config-service
-#  profiles:
-#    active:
-#      - native
+
+
+---
+spring:
+  profiles:
+      - native
+
+---
+spring:
+  profiles:
+      - cloud
+  cloud:
+    config:
+      label: master
+      server:
+        git:
+          uri: git@github.com:marzelwidmer/spring-cloud-bootstrap.git
+          strict-host-key-checking: false
+        # Whether the Spring Cloud Config Server should configure iteslf with the loaded configuration.
+        bootstrap: true
+
+
+---
+spring:
+  profiles:
+      - cloud-native
   cloud:
     config:
       label: master
       server:
         git:
           uri: file://${user.dir}/service-configuration/
-#          uri: git@github.com:marzelwidmer/spring-cloud-bootstrap.git
-#          strict-host-key-checking: false
-        # Whether the Spring Cloud Config Server should configure iteslf with the loaded configuration.
-        bootstrap: true
