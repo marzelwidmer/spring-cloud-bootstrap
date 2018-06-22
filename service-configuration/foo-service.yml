@@ -2,10 +2,6 @@ spring:
   profiles:
     - cloud
 
-spring:
-  profiles:
-    - cloud
-
 server:
   port: 8081
 
