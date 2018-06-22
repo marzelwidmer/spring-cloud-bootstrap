@@ -1,17 +1,32 @@
 spring:
+  profiles:
+    active:
+      - native
+
   application:
     name: config-service
 
+  cloud:
+    config:
+      label: master
+      server:
+        git:
+          uri: file://${user.dir}/service-configuration/
+      enabled: true
+
+
+eureka:
+  # Client
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVICE_URL:http://eureka:password@localhost:8061/eureka/}
 
 ---
-spring:
-  profiles:
-      - native
 
----
 spring:
   profiles:
       - cloud
+
   cloud:
     config:
       label: master
@@ -21,15 +36,3 @@ spring:
           strict-host-key-checking: false
         # Whether the Spring Cloud Config Server should configure iteslf with the loaded configuration.
         bootstrap: true
-
-
----
-spring:
-  profiles:
-      - cloud-native
-  cloud:
-    config:
-      label: master
-      server:
-        git:
-          uri: file://${user.dir}/service-configuration/

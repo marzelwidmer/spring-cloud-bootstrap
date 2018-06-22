@@ -1,14 +1,26 @@
 spring:
   application:
     name: foo-service
+
   cloud:
     config:
-      uri: http://config:password@localhost:8088
+      enabled: false
+
+eureka:
+  # Client
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVICE_URL:http://eureka:password@localhost:8061/eureka/}
+
 
 ---
 spring:
   profiles:
-    - native
+    - cloud
+
   cloud:
     config:
-      enabled: false
+      enabled: true
+      username: config
+      password: password
+      uri: http://localhost:8088

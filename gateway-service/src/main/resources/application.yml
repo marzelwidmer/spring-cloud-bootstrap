@@ -1,11 +1,7 @@
 spring:
-  profiles:
-    - native
 
-  security:
-    user:
-      name: "gateway"
-      password: "password"
+  profiles.include:
+      - unsecure
 
   cloud:
     gateway:
@@ -28,6 +24,11 @@ spring:
         filters:
         - RewritePath=/bar/(?<path>.*), /$\{path}
 
+  # Security
+  security:
+    user:
+      name: "gateway"
+      password: "password"
 
 # When using Spring Cloud Discovery, you must be aware that anybody who can query your service registry can obtain the credentials.
 eureka:
@@ -35,10 +36,11 @@ eureka:
     metadata-map:
       user.name: ${spring.security.user.name}
       user.password: ${spring.security.user.password}
-  # Client
-  client:
-    service-url:
-      defaultZone: http://eureka:password@localhost:8761/eureka/
+
+
+
+
+
 
 # If Spring Security is on the classpath and no other WebSecurityConfigurerAdapter is present, the actuators are secured by Spring Boot auto-config.
 management:

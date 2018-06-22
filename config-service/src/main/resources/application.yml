@@ -2,6 +2,7 @@ spring:
   profiles:
     active:
       - unsecure
+
   security:
     user:
       name: "config"
@@ -13,10 +14,7 @@ eureka:
     metadata-map:
       user.name: ${spring.security.user.name}
       user.password: ${spring.security.user.password}
-  # Client
-  client:
-    service-url:
-      defaultZone: http://eureka:password@localhost:8761/eureka/
+
 
 
 # If Spring Security is on the classpath and no other WebSecurityConfigurerAdapter is present, the actuators are secured by Spring Boot auto-config.
@@ -26,6 +24,13 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
+
+# Logging
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+  level:
+    org.springframework.cloud.config: DEBUG
 
 server:
   port: 8088

@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    - native
 
   security:
     user:
@@ -18,7 +16,8 @@ eureka:
     registerWithEureka: false
     fetchRegistry: false
     service-url:
-      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/
+       defaultZone: ${EUREKA_SERVICE_URL:http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/}
+
 
 management:
   endpoints:
