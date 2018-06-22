@@ -33,6 +33,7 @@ spring:
       server:
         git:
           uri: git@github.com:marzelwidmer/spring-cloud-bootstrap.git
+          search-paths: service-configuration
           strict-host-key-checking: false
         # Whether the Spring Cloud Config Server should configure iteslf with the loaded configuration.
         bootstrap: true
