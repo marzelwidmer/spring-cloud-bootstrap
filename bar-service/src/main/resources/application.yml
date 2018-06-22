@@ -39,4 +39,4 @@ logging:
     org.springframework.cloud.client.hypermedia: DEBUG
 
 server:
-  port: 5000
+  port: 4001

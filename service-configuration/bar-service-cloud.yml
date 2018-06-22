@@ -1,9 +1,5 @@
-spring:
-  profiles:
-    - cloud
-
 server:
-  port: 8082
+  port: 6002
 
 # Logging
 logging:

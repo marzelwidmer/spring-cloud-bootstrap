@@ -1,7 +1,0 @@
-server:
-  port: 8080
-
-# Logging
-logging:
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"

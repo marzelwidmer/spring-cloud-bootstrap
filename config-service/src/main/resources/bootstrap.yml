@@ -1,7 +1,7 @@
 spring:
   profiles:
     active:
-      - native
+      - local
 
   application:
     name: config-service
@@ -11,7 +11,7 @@ spring:
       label: master
       server:
         git:
-          uri: file://${user.dir}/service-configuration/
+          uri: file://${user.dir}/service-configuratin
       enabled: true
 
 

@@ -1,9 +1,5 @@
-spring:
-  profiles:
-    - cloud
-
 server:
-  port: 9999
+  port: 5001
 
 # Logging
 logging:

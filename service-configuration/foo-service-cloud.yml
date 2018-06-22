@@ -1,6 +1,5 @@
-spring:
-  profiles:
-    - cloud
+server:
+  port: 6001
 
 # Logging
 logging:
