@@ -11,7 +11,7 @@ spring:
       label: master
       server:
         git:
-          uri: file://${user.dir}/service-configuratin
+          uri: file://${user.dir}/service-configuration
       enabled: true
 
 
