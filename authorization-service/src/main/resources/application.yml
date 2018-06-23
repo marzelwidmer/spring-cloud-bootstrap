@@ -3,15 +3,9 @@ spring:
   profiles.include:
       - unsecure
 
-   # Cloud
-  cloud:
-    hypermedia:
-      refresh.initial-delay: 100
-      refresh.fixed-delay: 500
-
   security:
     user:
-      name: "foo"
+      name: "authorization"
       password: "password"
 
 
@@ -38,9 +32,9 @@ management:
 logging:
   pattern:
      console: "%clr(%d{yy-MM-dd E HH:mm:ss.SSS}){blue} %clr(%-5p) %clr(${PID}){faint} %clr(---){faint} %clr([%8.15t]){cyan} %clr(%-40.40logger{0}){blue} %clr(:){red} %clr(%m){faint}%n"
-#    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+#   console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
   level:
     org.springframework.cloud.client.hypermedia: DEBUG
 
 server:
-  port: 4000
+  port: 6969

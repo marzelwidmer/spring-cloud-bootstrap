@@ -36,7 +36,10 @@ eureka:
     metadata-map:
       user.name: ${spring.security.user.name}
       user.password: ${spring.security.user.password}
-
+  # Client
+  client:
+    region: default
+    registryFetchIntervalSeconds: 5
 
 
 # If Spring Security is on the classpath and no other WebSecurityConfigurerAdapter is present, the actuators are secured by Spring Boot auto-config.

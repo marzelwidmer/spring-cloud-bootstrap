@@ -1,26 +1,54 @@
 spring:
   application:
     name: bar-service
-
   cloud:
     config:
-      enabled: false
+      name: ${spring.application.name}
+      discovery.service-id: config-service
+      discovery.enabled: true
+      username: config
+      password: password
+  zipkin.baseUrl: http://zipkin-service/
 
 eureka:
-  # Client
   client:
     serviceUrl:
       defaultZone: ${EUREKA_SERVICE_URL:http://eureka:password@localhost:8061/eureka/}
 
 
----
-spring:
-  profiles:
-    - cloud
 
-  cloud:
-    config:
-      enabled: true
-      username: config
-      password: password
-      uri: http://localhost:8088
+
+
+
+
+#spring:
+#  application:
+#    name: bar-service
+#
+#  cloud:
+#    config:
+#      enabled: false
+#
+#eureka:
+#  # Client
+#  client:
+#    serviceUrl:
+#      defaultZone: ${EUREKA_SERVICE_URL:http://eureka:password@localhost:8061/eureka/}
+#
+#
+#---
+#spring:
+#  profiles:
+#    - cloud
+#
+#
+#  cloud:
+#    config:
+#      enabled: true
+#      name: ${spring.application.name}
+#      discovery.service-id: config-service
+#      username: config
+#      password: password
+##      uri: http://localhost:8088
+#
+#

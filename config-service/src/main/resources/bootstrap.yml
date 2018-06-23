@@ -13,6 +13,7 @@ spring:
         git:
           uri: file://${user.dir}/service-configuration
       enabled: true
+  zipkin.baseUrl: http://zipkin-service/
 
 
 eureka:

@@ -6,6 +6,7 @@ spring:
     config:
       enabled: false
 
+  zipkin.baseUrl: http://zipkin-service/
 
 ---
 spring:

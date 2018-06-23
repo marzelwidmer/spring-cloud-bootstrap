@@ -3,17 +3,11 @@ spring:
   profiles.include:
       - unsecure
 
-   # Cloud
-  cloud:
-    hypermedia:
-      refresh.initial-delay: 100
-      refresh.fixed-delay: 500
-
+  # Security
   security:
     user:
-      name: "foo"
+      name: "zipkin"
       password: "password"
-
 
 # When using Spring Cloud Discovery, you must be aware that anybody who can query your service registry can obtain the credentials.
 eureka:
@@ -40,7 +34,12 @@ logging:
      console: "%clr(%d{yy-MM-dd E HH:mm:ss.SSS}){blue} %clr(%-5p) %clr(${PID}){faint} %clr(---){faint} %clr([%8.15t]){cyan} %clr(%-40.40logger{0}){blue} %clr(:){red} %clr(%m){faint}%n"
 #    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
   level:
-    org.springframework.cloud.client.hypermedia: DEBUG
+    org.springframework.web: debug
 
 server:
-  port: 4000
+  port: 9411
+
+
+
+
+

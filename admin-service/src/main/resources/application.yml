@@ -16,6 +16,10 @@ eureka:
     metadata-map:
       user.name: ${spring.security.user.name}
       user.password: ${spring.security.user.password}
+  # Client
+  client:
+    region: default
+    registryFetchIntervalSeconds: 5
 
 # Logging
 logging:
