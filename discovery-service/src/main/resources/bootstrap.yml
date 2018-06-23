@@ -1,26 +1,10 @@
 spring:
   application:
     name: discovery-service
-
-  cloud:
-    config:
-      enabled: false
-
-  zipkin.baseUrl: http://zipkin-service/
-
----
-spring:
-  profiles:
-    - cloud
-
   cloud:
     config:
       enabled: true
       username: config
       password: password
       uri: http://localhost:8088
-
-
-
-
-
+  zipkin.baseUrl: http://zipkin-service/
