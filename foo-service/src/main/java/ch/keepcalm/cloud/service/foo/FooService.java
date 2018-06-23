@@ -2,6 +2,7 @@ package ch.keepcalm.cloud.service.foo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -58,6 +59,7 @@ public class FooService {
 
 }
 
+@Slf4j
 @RestController
 class GreetingController {
 
@@ -75,14 +77,14 @@ class GreetingController {
 
         Greeting greeting = new Greeting(String.format(TEMPLATE, name));
         greeting.add(linkTo(methodOn(GreetingController.class).greeting(name)).withSelfRel());
-
+        log.info(greeting.getContent());
         return new ResponseEntity<>(greeting, HttpStatus.OK);
     }
 
     @GetMapping("/greetingbar")
     public ResponseEntity<String> fooMeetBar() {
         Greeting bar = barClient.getBar();
-        System.out.println(bar.getContent());
+//        Log.info(bar.getContent());
         return new ResponseEntity<>(bar.getContent(), HttpStatus.OK);
     }
 

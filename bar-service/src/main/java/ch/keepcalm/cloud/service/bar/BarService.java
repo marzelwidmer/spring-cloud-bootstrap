@@ -2,6 +2,7 @@ package ch.keepcalm.cloud.service.bar;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +22,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @SpringBootApplication
-public class
-BarService {
+public class BarService {
 
     public static void main(String[] args) {
         SpringApplication.run(BarService.class, args);
@@ -44,6 +44,7 @@ BarService {
 }
 
 
+@Slf4j
 @RestController
 class GreetingController {
 
@@ -55,9 +56,11 @@ class GreetingController {
 
         Greeting greeting = new Greeting(String.format(TEMPLATE, name));
         greeting.add(linkTo(methodOn(GreetingController.class).greeting(name)).withSelfRel());
+        log.info(greeting.getContent());
 
         return new ResponseEntity<>(greeting, HttpStatus.OK);
     }
+
 }
 
 class Greeting extends ResourceSupport {
