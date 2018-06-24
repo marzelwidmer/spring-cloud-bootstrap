@@ -84,7 +84,7 @@ class GreetingController {
     @GetMapping("/greetingbar")
     public ResponseEntity<String> fooMeetBar() {
         Greeting bar = barClient.getBar();
-//        Log.info(bar.getContent());
+        log.info(bar.getContent());
         return new ResponseEntity<>(bar.getContent(), HttpStatus.OK);
     }
 
