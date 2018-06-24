@@ -16,11 +16,12 @@ spring:
         - Path=/foo/**
         filters:
         - RewritePath=/foo/(?<path>.*), /$\{path}
-     # bar-service
+      # bar-service
       - id: bar-service
         uri: lb://bar-service
         predicates:
         - Path=/bar/**
+        - Header=X-Request-Id, foobar # http GET :8080/bar/greeting 'X-Request-Id: foobar'
         filters:
         - RewritePath=/bar/(?<path>.*), /$\{path}
 
@@ -56,3 +57,6 @@ logging:
      console: "%clr(%d{yy-MM-dd E HH:mm:ss.SSS}){blue} %clr(%-5p) %clr(${PID}){faint}
           %clr([${spring.zipkin.service.name:${spring.application.name:-}},){magenta}%clr(%X{X-B3-TraceId:-},){yellow}%clr(%X{X-B3-SpanId:-},){cyan}%clr(,%X{X-Span-Export:-}]){blue}%clr([%8.15t]){cyan}
           %clr(%-40.40logger{0}){blue} %clr(:){red} %clr(%m){faint}%n"
+  level:
+    org.springframework.cloud.client.hypermedia: DEBUG
+    com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver: WARN

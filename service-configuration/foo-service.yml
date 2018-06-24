@@ -42,6 +42,7 @@ logging:
           %clr(%-40.40logger{0}){blue} %clr(:){red} %clr(%m){faint}%n"
   level:
     org.springframework.cloud.client.hypermedia: DEBUG
+    com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver: WARN
 
 server:
   port: 0
