@@ -1,11 +1,11 @@
 package ch.keepcalm.cloud.service.nutrition.food
 
- import ch.keepcalm.cloud.service.nutrition.HalResource
- import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter
+import ch.keepcalm.cloud.service.nutrition.HalResource
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider
 import org.springframework.hateoas.*
- import org.springframework.hateoas.mvc.ControllerLinkBuilder
- import org.springframework.http.ResponseEntity
+import org.springframework.hateoas.mvc.ControllerLinkBuilder
+import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.http.converter.json.MappingJacksonValue
 import org.springframework.web.bind.annotation.*
@@ -28,8 +28,7 @@ http://localhost:8080/foods/hal
 @RequestMapping("/foods", produces = [MediaTypes.HAL_JSON_UTF8_VALUE])
 class FoodController(val foodService: FoodService, val entityLinks: EntityLinks) {
 
-
-    @GetMapping
+    /*@GetMapping
     fun getFoods(): ResponseEntity<Resources<Resource<Food>>> {
         return ok(Resources.wrap(foodService.findAllFoods())
                 .also {
@@ -38,6 +37,13 @@ class FoodController(val foodService: FoodService, val entityLinks: EntityLinks)
                         foodResource.add(entityLinks.linkToSingleResource(FoodResource::class.java, foodResource.content.id).withSelfRel())
                     }
                 })
+    }*/
+
+    @GetMapping
+    fun getFoods(): ResponseEntity<Resources<Resource<FoodLinkResource>>> {
+        return ok(Resources.wrap(foodService.findAllFoods()!!.map { food ->
+            FoodLinkResource(food)}
+        ))
     }
 
 
@@ -48,22 +54,8 @@ class FoodController(val foodService: FoodService, val entityLinks: EntityLinks)
     }
 
 
-
-    @GetMapping(value = ["/hal"])
-    fun getHalFoods(): ResponseEntity<HalResource> {
-
-        val foodLinkResources = foodService.findAllFoods()!!.map { food: Food ->
-            FoodLinkResource(food)
-        }
-        val foodResource = HalResource()
-        foodResource.embedResource("foods", foodLinkResources)
-        foodResource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn<FoodController>(FoodController::class.java).getFoods()).withSelfRel())
-
-        return ok(foodResource)
-    }
-
-    //http://localhost:8080/foods/hal/1?fields=fat,kcal,name
-    @GetMapping(value = ["/filter/{id}"], params = ["fields"])
+    //http://localhost:8080/foods/filter/1?fields=fat,kcal,name
+    @GetMapping(value = ["/{id}/filter"], params = ["fields"])
     fun getFoodsWithSomeFields(@PathVariable id: String, @RequestParam fields: Array<String>): MappingJacksonValue {
         val food = foodService.findOne(id)
 
@@ -71,6 +63,7 @@ class FoodController(val foodService: FoodService, val entityLinks: EntityLinks)
         val filterProvider = SimpleFilterProvider().addFilter("foodFilter",
                 SimpleBeanPropertyFilter.filterOutAllExcept(*fields))
         wrapper.filters = filterProvider
+
         return wrapper
     }
 }

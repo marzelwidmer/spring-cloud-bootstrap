@@ -1,10 +1,11 @@
 package ch.keepcalm.cloud.service.nutrition.food
 
+import com.fasterxml.jackson.annotation.JsonFilter
 import java.util.*
 
 // Our domain object
 // id,name,synonyms,category,kcal,fat,protein
-//@JsonFilter("foodFilter")
+@JsonFilter("foodFilter")
 data class Food (
         var id: String = UUID.randomUUID().toString(),
         var name: String? = null,

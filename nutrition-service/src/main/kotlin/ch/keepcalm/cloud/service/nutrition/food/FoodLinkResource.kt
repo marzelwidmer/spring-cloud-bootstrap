@@ -9,6 +9,6 @@ class FoodLinkResource(val id: String, val name: String) : ResourceSupport() {
     constructor(s: Food) : this(s.id, s.name!!)
 
     init {
-        add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(FoodController::class.java).getFood(id)).withRel("food"))
+        add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(FoodController::class.java).getFood(id)).withRel("item"))
     }
 }
