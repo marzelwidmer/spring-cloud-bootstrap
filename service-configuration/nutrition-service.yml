@@ -45,4 +45,4 @@ logging:
     com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver: WARN
 
 server:
-  port: 0
+  port: 4002

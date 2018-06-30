@@ -59,12 +59,11 @@ class FoodController(val foodService: FoodService /*, val entityLinks: EntityLin
         return ResponseEntity.ok(FoodResource(food))
     }
 
+    //http GET :4002/foods/search/all name=='Zwiebel'
     @GetMapping(value = ["/search/all"], params = ["name"])
     fun findAllFoodsByName(@RequestParam name: String): ResponseEntity<Resources<Resource<FoodLinkResource>>> {
         return ok(Resources.wrap(foodService.findAllBy(name).map { food ->
             FoodLinkResource(food)}
         ))
     }
-
-
 }
