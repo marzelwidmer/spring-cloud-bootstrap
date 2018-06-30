@@ -1,10 +1,15 @@
 package ch.keepcalm.cloud.service.nutrition.food
 
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.mongodb.core.query.TextCriteria
+import org.springframework.data.repository.PagingAndSortingRepository
+import org.springframework.data.rest.core.annotation.RestResource
 
 //interface FoodRepository : PagingAndSortingRepository<Food, String>{
-interface FoodRepository : MongoRepository<Food, String>{
-//    @RestResource(rel = "by-name")
-//    fun findByName(@Param("name") name: String, pageable: Pageable): Page<Food>
-//    fun findByName(@Param("name") name: String): List<Food>
+interface FoodRepository : PagingAndSortingRepository<Food, String> {
+    @RestResource(rel = "by-name")
+    fun findByName(name: String) : Food
+
+    // findAllBy(TextCriteria criteria, Sort sort)
+    // Execute a full-text search and define sorting dynamically
+    fun findAllBy(criteria: TextCriteria): List<Food>
 }

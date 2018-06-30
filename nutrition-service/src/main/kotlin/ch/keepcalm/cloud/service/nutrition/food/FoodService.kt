@@ -1,6 +1,9 @@
 package ch.keepcalm.cloud.service.nutrition.food
 
+import org.springframework.data.mongodb.core.query.TextCriteria
 import org.springframework.stereotype.Service
+
+
 
 @Service
 class FoodService (private val foodRepository: FoodRepository){
@@ -14,7 +17,6 @@ class FoodService (private val foodRepository: FoodRepository){
         return food
     }
 
-//    fun findByName(name: String) = foodRepository.findByName(name, PageRequest.of(0, 10))
-    fun findByName(name: String) = foodRepository.findOne()
-
+    fun findByName(name: String) =foodRepository.findByName(name)
+    fun findAllBy(name: String) =foodRepository.findAllBy(TextCriteria.forDefaultLanguage().matchingAny(name))
 }

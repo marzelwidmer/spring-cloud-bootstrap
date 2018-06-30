@@ -15,7 +15,7 @@ class FoodResource(
 ) : ResourceSupport() {
 
     constructor(f: Food) : this(
-            f.id, f.name!!, f.synonyms, f.category, f.kcal, f.fat, f.protein
+            f.id.toHexString(), f.name!!, f.synonyms, f.category, f.kcal, f.fat, f.protein
     )
 
     init {
