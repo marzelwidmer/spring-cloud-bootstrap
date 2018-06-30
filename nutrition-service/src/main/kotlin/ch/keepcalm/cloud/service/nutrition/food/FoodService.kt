@@ -3,9 +3,9 @@ package ch.keepcalm.cloud.service.nutrition.food
 import org.springframework.stereotype.Service
 
 @Service
-class FoodService (val foodRepository: FoodRepository){
+class FoodService (private val foodRepository: FoodRepository){
 
-    fun findAllFoods (): MutableList<Food>? {
+    fun findAllFoods (): MutableIterable<Food> {
         return foodRepository.findAll()
     }
 
@@ -13,4 +13,8 @@ class FoodService (val foodRepository: FoodRepository){
         val food: Food = foodRepository.findById(id).get()
         return food
     }
+
+//    fun findByName(name: String) = foodRepository.findByName(name, PageRequest.of(0, 10))
+    fun findByName(name: String) = foodRepository.findOne()
+
 }

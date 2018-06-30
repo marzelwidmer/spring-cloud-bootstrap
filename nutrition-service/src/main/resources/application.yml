@@ -17,30 +17,8 @@ spring:
   data:
     mongodb:
       database: ${mongo.database}
-#      port: ${mongo.port}
-#      host: ${mongo.host}
-#      username: ${mongo.user}
-#      password: ${mongo.password}
-      uri: mongodb://${mongo.database}:${mongo.password}@${mongo.host}:${mongo.port}
-
-
-
-
----
-spring:
-  profiles: dev
-  data:
-    mongodb:
-      database: keepcalm-foods
-      port: 32768
-
----
-spring:
-  profiles: mlab
-  data:
-    mongodb:
-      database: ${mongo.database}
       port: ${mongo.port}
       host: ${mongo.host}
       username: ${mongo.user}
       password: ${mongo.password}
+
