@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service
 
 
 
+
+
 @Service
 class FoodService (private val foodRepository: FoodRepository){
 
@@ -18,5 +20,9 @@ class FoodService (private val foodRepository: FoodRepository){
     }
 
     fun findByName(name: String) =foodRepository.findByName(name)
-    fun findAllBy(name: String) =foodRepository.findAllBy(TextCriteria.forDefaultLanguage().matchingAny(name))
+
+    fun findAllBy(name: String): List<Food> {
+        val result = foodRepository.findAllBy(TextCriteria.forDefaultLanguage().matching(name))
+        return result
+    }
 }

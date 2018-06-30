@@ -4,16 +4,18 @@ import com.fasterxml.jackson.annotation.JsonFilter
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.TextIndexed
+import org.springframework.data.mongodb.core.mapping.Document
 
 // Our domain object
 // id,name,synonyms,category,kcal,fat,protein
 @JsonFilter("foodFilter")
-data class Food (
 
+@Document
+data class Food (
         @Id var id: ObjectId,
-//        var id: String = UUID.randomUUID().toString(),
-        @TextIndexed
+        @TextIndexed(weight = 2f)
         var name: String? = null,
+        @TextIndexed(weight = 3f)
         var synonyms: String? = null,
         var category: String? = null,
         var kcal: Int? = null,
