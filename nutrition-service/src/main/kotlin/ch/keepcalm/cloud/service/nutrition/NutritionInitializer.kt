@@ -23,17 +23,8 @@ class NutritionInitializer(private val repository: FoodRepository) {
 
     init {
         databaseConsistencyChecks(repository.count(), foods.size.toLong())
-        /*when {
-            repository.count() < foods!!.size -> {
-                log.warn("It looks MongoDB are not upToDate we found ${repository.count()} documents in out MongoDB and in the CSV ${foods.size} food item - will re-import it.")
-                log.info("Clear  MongoDB")
-                repository.deleteAll()
-                log.info("Importing ${foods!!.size} foods into MongoDB… ")
-                foods.map { food -> repository.save(food) }
-                log.info("Successfully imported ${repository.count()} foods.")
-            }
-        }*/
     }
+
     fun databaseConsistencyChecks(db: Long, csv: Long) = when {
         db == csv -> log.info("MongoDB is up-to-date.")
         db > csv -> {

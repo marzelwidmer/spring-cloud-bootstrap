@@ -1,15 +1,15 @@
 package ch.keepcalm.cloud.service.nutrition.food
 
- import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter
- import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider
- import org.springframework.hateoas.ExposesResourceFor
- import org.springframework.hateoas.MediaTypes
- import org.springframework.hateoas.Resource
- import org.springframework.hateoas.Resources
- import org.springframework.http.ResponseEntity
- import org.springframework.http.ResponseEntity.ok
- import org.springframework.http.converter.json.MappingJacksonValue
- import org.springframework.web.bind.annotation.*
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider
+import org.springframework.hateoas.ExposesResourceFor
+import org.springframework.hateoas.MediaTypes
+import org.springframework.hateoas.Resource
+import org.springframework.hateoas.Resources
+import org.springframework.http.ResponseEntity
+import org.springframework.http.ResponseEntity.ok
+import org.springframework.http.converter.json.MappingJacksonValue
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @ExposesResourceFor(FoodResource::class)
@@ -29,7 +29,17 @@ class FoodController(val foodService: FoodService /*, val entityLinks: EntityLin
     @GetMapping
     fun getFoods(): ResponseEntity<Resources<Resource<FoodLinkResource>>> {
         return ok(Resources.wrap(foodService.findAllFoods().map { food ->
-            FoodLinkResource(food)}
+            FoodLinkResource(food)
+        }
+        ))
+    }
+
+    //http GET :4002/foods/ name=='Zwiebel'
+    @GetMapping(params = ["name"])
+    fun findAllFoodsByName(@RequestParam name: String): ResponseEntity<Resources<Resource<FoodLinkResource>>> {
+        return ok(Resources.wrap(foodService.findAllBy(name).map { food ->
+            FoodLinkResource(food)
+        }
         ))
     }
 
@@ -53,17 +63,11 @@ class FoodController(val foodService: FoodService /*, val entityLinks: EntityLin
     }
 
     //http GET :4002/foods/search/ name=='Zwiebel, roh'
-    @GetMapping(value = ["/search"], params = ["name"])
+    /*@GetMapping(value = ["/search"], params = ["name"])
     fun findFoodsByName(@RequestParam name: String):ResponseEntity<FoodResource> {
         val food = foodService.findByName(name)
         return ResponseEntity.ok(FoodResource(food))
-    }
+    }*/
 
-    //http GET :4002/foods/search/all name=='Zwiebel'
-    @GetMapping(value = ["/search/all"], params = ["name"])
-    fun findAllFoodsByName(@RequestParam name: String): ResponseEntity<Resources<Resource<FoodLinkResource>>> {
-        return ok(Resources.wrap(foodService.findAllBy(name).map { food ->
-            FoodLinkResource(food)}
-        ))
-    }
+
 }
