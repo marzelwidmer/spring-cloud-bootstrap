@@ -3,10 +3,6 @@ package ch.keepcalm.cloud.service.nutrition.food
 import org.springframework.data.mongodb.core.query.TextCriteria
 import org.springframework.stereotype.Service
 
-
-
-
-
 @Service
 class FoodService (private val foodRepository: FoodRepository){
 
