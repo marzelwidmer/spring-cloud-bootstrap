@@ -1,5 +1,7 @@
-package ch.keepcalm.cloud.service.nutrition.food
+package ch.keepcalm.cloud.service.nutrition.food.resource
 
+import ch.keepcalm.cloud.service.nutrition.food.controller.FoodController
+import ch.keepcalm.cloud.service.nutrition.food.domain.Food
 import org.springframework.hateoas.ResourceSupport
 import org.springframework.hateoas.mvc.ControllerLinkBuilder
 

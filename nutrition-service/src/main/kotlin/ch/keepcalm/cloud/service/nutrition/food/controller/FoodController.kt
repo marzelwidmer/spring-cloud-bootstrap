@@ -1,5 +1,9 @@
-package ch.keepcalm.cloud.service.nutrition.food
+package ch.keepcalm.cloud.service.nutrition.food.controller
 
+import ch.keepcalm.cloud.service.nutrition.food.resource.FoodLinkResource
+import ch.keepcalm.cloud.service.nutrition.food.resource.FoodListResource
+import ch.keepcalm.cloud.service.nutrition.food.resource.FoodResource
+import ch.keepcalm.cloud.service.nutrition.food.service.FoodService
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider
 import org.slf4j.LoggerFactory
@@ -20,10 +24,10 @@ class FoodController(val service: FoodService /*, val entityLinks: EntityLinks*/
     private final val log = LoggerFactory.getLogger(FoodController::class.java)
 
     @GetMapping
-    fun getFoods(): ResponseEntity<Foods> {
+    fun getFoods(): ResponseEntity<FoodListResource> {
         val foodList: List<FoodLinkResource> = service.findAllFoods().map { food -> FoodLinkResource(food) }
         val totalItems = service.findAllFoods().count()
-        val foodResource = Foods(_embedded = mapOf(Pair("nu:foods", foodList)), totalItems = totalItems)
+        val foodResource = FoodListResource(_embedded = mapOf(Pair("nu:foods", foodList)), totalItems = totalItems)
         return ResponseEntity.ok(foodResource)
 
     }

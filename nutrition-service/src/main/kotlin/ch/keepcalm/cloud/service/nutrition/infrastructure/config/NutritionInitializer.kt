@@ -1,7 +1,7 @@
-package ch.keepcalm.cloud.service.nutrition
+package ch.keepcalm.cloud.service.nutrition.infrastructure.config
 
-import ch.keepcalm.cloud.service.nutrition.food.Food
-import ch.keepcalm.cloud.service.nutrition.food.FoodRepository
+import ch.keepcalm.cloud.service.nutrition.food.domain.Food
+import ch.keepcalm.cloud.service.nutrition.food.repository.FoodRepository
 import com.opencsv.bean.ColumnPositionMappingStrategy
 import com.opencsv.bean.CsvToBean
 import com.opencsv.bean.CsvToBeanBuilder
@@ -78,7 +78,7 @@ class NutritionInitializer(private val repository: FoodRepository) {
 
     fun convertCsvFoodItemToFood(csvToBean: CsvToBean<CsvFoodItem>?): List<Food>?  =
        csvToBean?.parse()?.stream()?.map {
-            Food(id = ObjectId.get(), name = it.name, synonyms = it.synonyms, category = it.category, kcal = it.kcal, fat = it.fat, protein = it.protein)
+           Food(id = ObjectId.get(), name = it.name, synonyms = it.synonyms, category = it.category, kcal = it.kcal, fat = it.fat, protein = it.protein)
         }?.toList()
 
 }

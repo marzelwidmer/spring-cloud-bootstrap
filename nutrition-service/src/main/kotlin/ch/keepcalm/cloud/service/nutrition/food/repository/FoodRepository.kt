@@ -1,5 +1,6 @@
-package ch.keepcalm.cloud.service.nutrition.food
+package ch.keepcalm.cloud.service.nutrition.food.repository
 
+import ch.keepcalm.cloud.service.nutrition.food.domain.Food
 import org.springframework.data.mongodb.core.query.TextCriteria
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.data.rest.core.annotation.RestResource

@@ -1,6 +1,6 @@
 package ch.keepcalm.cloud.service.nutrition.csv
 
-import ch.keepcalm.cloud.service.nutrition.food.Food
+import ch.keepcalm.cloud.service.nutrition.food.domain.Food
 import com.opencsv.bean.ColumnPositionMappingStrategy
 import com.opencsv.bean.CsvToBean
 import com.opencsv.bean.CsvToBeanBuilder
@@ -43,7 +43,7 @@ fun main(args: Array<String>?) {
 
 fun convertCsvFoodToFood(csvToBean: CsvToBean<CsvFood>?): List<Food>? {
     var foods =   csvToBean?.parse()?.stream()?.map {
-        Food(id= ObjectId.get(), name = it.name, synonyms = it.synonyms, category = it.category, kcal = it.kcal, fat = it.fat, protein = it.protein)
+        Food(id = ObjectId.get(), name = it.name, synonyms = it.synonyms, category = it.category, kcal = it.kcal, fat = it.fat, protein = it.protein)
     }?.toList()
     return foods
 }

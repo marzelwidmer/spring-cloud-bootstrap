@@ -1,4 +1,4 @@
-package ch.keepcalm.cloud.service.nutrition.config
+package ch.keepcalm.cloud.service.nutrition.infrastructure.config
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider

@@ -1,4 +1,4 @@
-package ch.keepcalm.cloud.service.nutrition.food
+package ch.keepcalm.cloud.service.nutrition.food.domain
 
 import com.fasterxml.jackson.annotation.JsonFilter
 import org.bson.types.ObjectId

@@ -1,6 +1,6 @@
 package ch.keepcalm.cloud.service.nutrition
 
-import ch.keepcalm.cloud.service.nutrition.food.FoodRepository
+import ch.keepcalm.cloud.service.nutrition.food.repository.FoodRepository
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

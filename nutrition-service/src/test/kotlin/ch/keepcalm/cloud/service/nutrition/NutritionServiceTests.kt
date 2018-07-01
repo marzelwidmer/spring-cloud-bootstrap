@@ -1,7 +1,7 @@
 package ch.keepcalm.cloud.service.nutrition
 
-import ch.keepcalm.cloud.service.nutrition.food.Food
-import ch.keepcalm.cloud.service.nutrition.food.FoodRepository
+import ch.keepcalm.cloud.service.nutrition.food.domain.Food
+import ch.keepcalm.cloud.service.nutrition.food.repository.FoodRepository
 import com.opencsv.bean.ColumnPositionMappingStrategy
 import com.opencsv.bean.CsvToBean
 import com.opencsv.bean.CsvToBeanBuilder
