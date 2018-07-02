@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class IndexController {
     @GetMapping(value = ["/"])
-    fun getApiIndex() : ResourceSupport {
+    fun getApiIndex(): ResourceSupport {
         val resource = ResourceSupport()
+
         resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(FoodController::class.java).getFoods()).withRel("foods"))
+        resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(IndexController::class.java).getApiIndex()).slash("profile").withRel("profile"))
         resource.add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(IndexController::class.java).getApiIndex()).withSelfRel())
         return resource
     }
