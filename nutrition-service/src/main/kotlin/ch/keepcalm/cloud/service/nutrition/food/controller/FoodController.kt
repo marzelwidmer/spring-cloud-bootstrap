@@ -9,10 +9,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider
 import org.slf4j.LoggerFactory
 import org.springframework.hateoas.ExposesResourceFor
 import org.springframework.hateoas.MediaTypes
-import org.springframework.hateoas.Resource
-import org.springframework.hateoas.Resources
 import org.springframework.http.ResponseEntity
-import org.springframework.http.ResponseEntity.ok
 import org.springframework.http.converter.json.MappingJacksonValue
 import org.springframework.web.bind.annotation.*
 
@@ -28,21 +25,29 @@ class FoodController(val service: FoodService /*, val entityLinks: EntityLinks*/
         val foodList: List<FoodLinkResource> = service.findAllFoods().map { food -> FoodLinkResource(food) }
         val totalItems = service.findAllFoods().count()
         val foodResource = FoodListResource(_embedded = mapOf(Pair("nu:foods", foodList)), totalItems = totalItems)
+        log.info("Get all foods is called")
         return ResponseEntity.ok(foodResource)
 
     }
 
     //http GET :4002/foods/ name=='Zwiebel'
     @GetMapping(params = ["name"])
-    fun findAllFoodsByName(@RequestParam name: String): ResponseEntity<Resources<Resource<FoodLinkResource>>> {
+    fun findAllFoodsByName(@RequestParam name: String): ResponseEntity<FoodListResource> {
+        log.info("Search food with param [${name}] is called")
+        val foodList: List<FoodLinkResource> = service.findAllBy(name).map { food -> FoodLinkResource(food) }
+        val totalItems = foodList.size
+        val foodResource = FoodListResource(_embedded = mapOf(Pair("nu:foods", foodList)), totalItems = totalItems)
+        return ResponseEntity.ok(foodResource)
+
+        /*
         return ok(Resources.wrap(service.findAllBy(name).map { food ->
-            FoodLinkResource(food)
-        }
-        ))
+            FoodResource(food) }
+        ))*/
     }
 
     @GetMapping(value = ["/{id}"])
     fun getFood(@PathVariable id: String): ResponseEntity<FoodResource> {
+        log.info("Get a food is called with id [${id}]")
         val food = service.findOne(id)
         return ResponseEntity.ok(FoodResource(food))
     }
@@ -50,6 +55,8 @@ class FoodController(val service: FoodService /*, val entityLinks: EntityLinks*/
     //http://localhost:8080/foods/filter/1?fields=fat,kcal,name
     @GetMapping(value = ["/{id}/filter"], params = ["fields"])
     fun getFoodsWithSomeFields(@PathVariable id: String, @RequestParam fields: Array<String>): MappingJacksonValue {
+        log.info("Filter food is called for id [${id}] with fields [${fields}]")
+
         val food = service.findOne(id)
 
         val wrapper = MappingJacksonValue(food)
