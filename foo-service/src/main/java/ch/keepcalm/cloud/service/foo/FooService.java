@@ -6,12 +6,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.hypermedia.DiscoveredResource;
+import org.springframework.cloud.client.hypermedia.DynamicServiceInstanceProvider;
+import org.springframework.cloud.client.hypermedia.ServiceInstanceProvider;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.client.Traverson;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +33,35 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.springframework.hateoas.client.Hop.rel;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-// need to reach the bar-service, otherwise "java.lang.IllegalStateException: No instances available for bar-service"
 public class FooService {
+
+    /**
+     * A remote {@link DiscoveredResource} that provides functionality to lookup foods.
+     *
+     * @param provider
+     * @return
+     */
+    @Bean
+    public DiscoveredResource foodsResource(ServiceInstanceProvider provider) {
+        return new DiscoveredResource(provider, traverson -> traverson.follow("foods"));
+    }
+
+
+    @Bean
+    public DynamicServiceInstanceProvider dynamicServiceProvider(DiscoveryClient client) {
+        return new DynamicServiceInstanceProvider(client, "nutrition-service");
+    }
 
     @LoadBalanced
     @Bean
@@ -59,13 +89,16 @@ public class FooService {
 
 }
 
+
 @Slf4j
 @RestController
 class GreetingController {
 
     private final BarClient barClient;
+    private final DiscoveredResource foodsResource;
 
-    public GreetingController(BarClient barClient){
+    public GreetingController(BarClient barClient, DiscoveredResource foodsResource) {
+        this.foodsResource = foodsResource;
         this.barClient = barClient;
     }
 
@@ -86,6 +119,49 @@ class GreetingController {
         Greeting bar = barClient.getBar();
         log.info(bar.getContent());
         return new ResponseEntity<>(bar.getContent(), HttpStatus.OK);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<String> getFoodWithTraverson(
+            @RequestParam(value = "name", required = false, defaultValue = "*") String name) throws URISyntaxException {
+
+        final String REMOTE_SERVICE_ROOT_URI = foodsResource.getProvider().getServiceInstance().getUri().toString();
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("name", name);
+
+        Traverson traverson = new Traverson(new URI(REMOTE_SERVICE_ROOT_URI), MediaTypes.HAL_JSON, MediaTypes.HAL_JSON_UTF8);
+
+        ParameterizedTypeReference<Resource<Food>> resourceParameterizedTypeReference = new ParameterizedTypeReference<Resource<Food>>() {
+        };
+
+        //        Food food = traverson.
+//                follow(rel("foods").withParameters(parameters)).//
+//                follow("$._embedded.foods[0]._links.self.href").//
+//                toObject(resourceParameterizedTypeReference).getContent();
+
+
+        Food food = traverson
+                .follow("foods", "find")
+                .withTemplateParameters(parameters)
+                .toObject(resourceParameterizedTypeReference)
+                .getContent();
+
+
+        //        Traverson traverson = new Traverson(new URI(REMOTE_SERVICE_ROOT_URI),
+//                MediaTypes.HAL_JSON, MediaTypes.HAL_JSON_UTF8); // .setRestOperations(restTemplate);
+//        Resources<Resource<Food>> foods = traverson
+//                .follow("foods")
+//                .toObject(new TypeReferences.ResourcesType<Resource<Food>>() {});
+
+//        int totalItem = traverson.follow("foods", "find").
+//                withTemplateParameters(parameters).
+//                toObject("$.totalItems");
+//        System.out.println(totalItem);
+//        System.out.println(traverson.follow("foods").asLink());
+//        return new ResponseEntity(foods.getContent(), HttpStatus.OK);
+
+        return new ResponseEntity(food, HttpStatus.OK);
     }
 
 }

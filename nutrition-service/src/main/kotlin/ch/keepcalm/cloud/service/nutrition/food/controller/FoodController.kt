@@ -24,7 +24,7 @@ class FoodController(val service: FoodService /*, val entityLinks: EntityLinks*/
     fun getFoods(): ResponseEntity<FoodListResource> {
         val foodList: List<FoodLinkResource> = service.findAllFoods().map { food -> FoodLinkResource(food) }
         val totalItems = service.findAllFoods().count()
-        val foodResource = FoodListResource(_embedded = mapOf(Pair("nu:foods", foodList)), totalItems = totalItems)
+        val foodResource = FoodListResource(_embedded = mapOf(Pair("foods", foodList)), totalItems = totalItems)
         log.info("Get all foods is called")
         return ResponseEntity.ok(foodResource)
 
@@ -32,11 +32,11 @@ class FoodController(val service: FoodService /*, val entityLinks: EntityLinks*/
 
     //http GET :4002/foods/ name=='Zwiebel'
     @GetMapping(params = ["name"])
-    fun findAllFoodsByName(@RequestParam name: String): ResponseEntity<FoodListResource> {
+    fun findAllFoodsByName(@RequestParam("name", defaultValue = "*") name: String): ResponseEntity<FoodListResource> {
         log.info("Search food with param [${name}] is called")
         val foodList: List<FoodLinkResource> = service.findAllBy(name).map { food -> FoodLinkResource(food) }
         val totalItems = foodList.size
-        val foodResource = FoodListResource(_embedded = mapOf(Pair("nu:foods", foodList)), totalItems = totalItems)
+        val foodResource = FoodListResource(_embedded = mapOf(Pair("foods", foodList)), totalItems = totalItems)
         return ResponseEntity.ok(foodResource)
 
         /*

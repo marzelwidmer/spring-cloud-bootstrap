@@ -14,6 +14,6 @@ class FoodLinkResource(val id: String, val name: String) : ResourceSupport() {
     constructor(f: Food) : this(f.id.toHexString(), f.name!!)
 
     init {
-        add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(FoodController::class.java).getFood(id)).withRel("item"))
+        add(ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(FoodController::class.java).getFood(id)).withSelfRel())
     }
 }
