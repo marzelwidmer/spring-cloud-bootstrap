@@ -16,10 +16,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.hateoas.MediaTypes;
-import org.springframework.hateoas.Resource;
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.*;
 import org.springframework.hateoas.client.Traverson;
+import org.springframework.hateoas.mvc.TypeReferences;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +36,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import static org.springframework.hateoas.client.Hop.rel;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
@@ -127,25 +126,57 @@ class GreetingController {
 
         final String REMOTE_SERVICE_ROOT_URI = foodsResource.getProvider().getServiceInstance().getUri().toString();
 
+
+        TypeReferences.ResourcesType<Resource<Food>> resourceParameterizedTypeReference =
+                new TypeReferences.ResourcesType<Resource<Food>>() {};
+
+        URI apiBaseUrl = foodsResource.getProvider().getServiceInstance().getUri();
+
+        Traverson traverson = new Traverson(apiBaseUrl, MediaTypes.HAL_JSON);
+        Traverson.TraversalBuilder builder = traverson.follow("foods", "find");
+
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Authorization", String.format("Bearer %s", generateJsonWebToken(toolId)));
+//        builder.withHeaders(headers);
+
         Map<String, Object> parameters = new HashMap<>();
+        parameters.put("name", name);
+
+        Resources<Resource<Food>> associationResources = builder.withTemplateParameters(parameters).toObject(resourceParameterizedTypeReference);
+        // Should only be one matching this search criterion
+        if (associationResources.getContent().size() > 1) {
+            throw new IllegalStateException(String.format(
+                    "Number of rubric association resources greater than one for request: %s",
+                    associationResources.getLink(Link.REL_SELF).toString()));
+        }
+
+        Optional<Resource<Food>> firstAssociationResources = associationResources.getContent().stream().findFirst();
+        return new ResponseEntity(firstAssociationResources, HttpStatus.OK);
+
+
+/*        Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", name);
 
         Traverson traverson = new Traverson(new URI(REMOTE_SERVICE_ROOT_URI), MediaTypes.HAL_JSON, MediaTypes.HAL_JSON_UTF8);
 
         ParameterizedTypeReference<Resource<Food>> resourceParameterizedTypeReference = new ParameterizedTypeReference<Resource<Food>>() {
-        };
+        };*/
+
+
 
         //        Food food = traverson.
 //                follow(rel("foods").withParameters(parameters)).//
 //                follow("$._embedded.foods[0]._links.self.href").//
 //                toObject(resourceParameterizedTypeReference).getContent();
 
+/*
 
         Food food = traverson
                 .follow("foods", "find")
                 .withTemplateParameters(parameters)
                 .toObject(resourceParameterizedTypeReference)
                 .getContent();
+*/
 
 
         //        Traverson traverson = new Traverson(new URI(REMOTE_SERVICE_ROOT_URI),
@@ -160,8 +191,7 @@ class GreetingController {
 //        System.out.println(totalItem);
 //        System.out.println(traverson.follow("foods").asLink());
 //        return new ResponseEntity(foods.getContent(), HttpStatus.OK);
-
-        return new ResponseEntity(food, HttpStatus.OK);
+//        return new ResponseEntity(foods, HttpStatus.OK);
     }
 
 }
