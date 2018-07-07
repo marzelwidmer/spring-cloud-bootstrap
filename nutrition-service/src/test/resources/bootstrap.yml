@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: nutrition-service
+
+  cloud:
+    config:
+      enabled: false
+
+eureka:
+  client:
+    enabled: false
