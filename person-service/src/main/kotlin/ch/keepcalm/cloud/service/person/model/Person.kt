@@ -1,6 +1,9 @@
 package ch.keepcalm.cloud.service.person.model
 
-data class Person(var name: String? = null,
+import java.util.*
+
+data class Person(var id: String? = UUID.randomUUID().toString(),
+                  var name: String? = null,
                   var age: Int? = null)
                  // var address: Address? = null)
 
