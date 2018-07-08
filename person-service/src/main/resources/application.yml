@@ -1,0 +1,8 @@
+spring:
+  profiles.include:
+      - unsecure
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: 4003

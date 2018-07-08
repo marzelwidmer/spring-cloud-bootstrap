@@ -23,6 +23,7 @@
         <module>gateway-service</module>
         <module>foo-service</module>
         <module>bar-service</module>
+        <module>person-service</module>
     </modules>
 
 </project>

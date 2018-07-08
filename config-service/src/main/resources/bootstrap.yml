@@ -11,7 +11,8 @@ spring:
       label: master
       server:
         git:
-          uri: file://${user.dir}/service-configuration
+          uri: file://${user.dir}/
+          search-paths: service-configuration
       enabled: true
   zipkin.baseUrl: http://zipkin-service/
 
