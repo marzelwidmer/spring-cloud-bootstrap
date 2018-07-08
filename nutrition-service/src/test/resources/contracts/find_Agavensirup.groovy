@@ -27,17 +27,26 @@ Contract.make {
                                 href: value(
                                         consumer("http://${fromRequest().header('Host')}/foods/{name}"),
                                         producer("http://localhost/foods{?name}")
-//                                        producer("http://${fromRequest().header('Host')}/foods/{name}")
                                 ),
                                 templated: true
                         ]
                 ],
                 _embedded: [
                     foods : [
-
+                        name: "Agavensirup",
+//                        _links:
+//                                [
+//                                self:
+//                        [
+//                                        href: value(
+//                                                consumer("http://${fromRequest().header('Host')}${fromRequest().url()}"),
+//                                                producer("http://localhost${fromRequest().path()}/5b3877a712f6466db803da0e")
+//                                        )
+//                                ]
+//                        ]
                     ]
                 ],
-                totalItems : 0
+                totalItems : 1
         )
     }
 }

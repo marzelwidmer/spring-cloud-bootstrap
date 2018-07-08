@@ -38,11 +38,6 @@ class FoodController(val service: FoodService /*, val entityLinks: EntityLinks*/
         val totalItems = foodList.size
         val foodResource = FoodListResource(_embedded = mapOf(Pair("foods", foodList)), totalItems = totalItems)
         return ResponseEntity.ok(foodResource)
-
-        /*
-        return ok(Resources.wrap(service.findAllBy(name).map { food ->
-            FoodResource(food) }
-        ))*/
     }
 
     @GetMapping(value = ["/{id}"])
