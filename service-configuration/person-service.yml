@@ -1,0 +1,48 @@
+spring:
+
+  profiles.include:
+      - unsecure
+
+   # Cloud
+  cloud:
+    hypermedia:
+      refresh.initial-delay: 100
+      refresh.fixed-delay: 500
+
+  security:
+    user:
+      name: "person"
+      password: "password"
+
+
+# When using Spring Cloud Discovery, you must be aware that anybody who can query your service registry can obtain the credentials.
+eureka:
+  instance:
+    metadata-map:
+      user.name: ${spring.security.user.name}
+      user.password: ${spring.security.user.password}
+  # Client
+  client:
+    region: default
+    registryFetchIntervalSeconds: 5
+
+# If Spring Security is on the classpath and no other WebSecurityConfigurerAdapter is present, the actuators are secured by Spring Boot auto-config.
+management:
+  endpoints:
+    web.exposure.include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+# Logging
+logging:
+  pattern:
+     console: "%clr(%d{yy-MM-dd E HH:mm:ss.SSS}){blue} %clr(%-5p) %clr(${PID}){faint}
+          %clr([${spring.zipkin.service.name:${spring.application.name:-}},){magenta}%clr(%X{X-B3-TraceId:-},){yellow}%clr(%X{X-B3-SpanId:-},){cyan}%clr(,%X{X-Span-Export:-}]){blue}%clr([%8.15t]){cyan}
+          %clr(%-40.40logger{0}){blue} %clr(:){red} %clr(%m){faint}%n"
+  level:
+    org.springframework.cloud.client.hypermedia: DEBUG
+    com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver: WARN
+
+server:
+  port: 4003
