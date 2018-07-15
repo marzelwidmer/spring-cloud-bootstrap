@@ -1,4 +1,4 @@
-package ch.keepcalm.cloud.service.nutrition.spring.cloud.springcloudcontractproducer;
+package ch.keepcalm.cloud.service.nutrition;
 
 import ch.keepcalm.cloud.service.nutrition.food.domain.Food;
 import ch.keepcalm.cloud.service.nutrition.food.service.FoodService;
@@ -39,20 +39,44 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 @AutoConfigureMessageVerifier
 public class BaseTestClass {
 
-    @Autowired
-    private FoodController foodController;
+    private static final String OUTPUT = "target/generated-snippets";
 
     @Autowired
     private WebApplicationContext context;
 
+    @Rule
+    public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation(OUTPUT);
+
+    @Rule
+    public TestName testName = new TestName();
+
     @MockBean
     private FoodService service;
 
+
     @Before
     public void setup() {
-        RestAssuredMockMvc.webAppContextSetup(context);
-        given(foodService.findAllBy("Agavensirup")).willReturn(createAgavensirup());
+
+        RestAssuredMockMvc.mockMvc(MockMvcBuilders.webAppContextSetup(this.context)
+                .apply(documentationConfiguration(this.restDocumentation).operationPreprocessors()
+                        .withRequestDefaults(prettyPrint())
+                        .withResponseDefaults(prettyPrint()))
+                .alwaysDo(document(getClass().getSimpleName() + "_" + testName.getMethodName()))
+                .build());
+        given(service.findOne(anyString())).willThrow(new NotFoundException("Invalid parameter"));
+        given(service.findAllBy("Agavensirup")).willReturn(createAgavensirup());
+
+//
+//        willReturn(createPartnerListWithFavor())
+//                .given(service).findPartners();
+//
+//        willReturn(createFavorPartner())
+//                .given(service).findOne("M4856252");
+
+
     }
+
+
     @NotNull
     private List<Food> createAgavensirup() {
         Food agavensirup = new Food(new ObjectId("5b3877a712f6466db803da0e"), "Agavensirup", "Agavendicksaft", "Süssigkeiten/Zucker und Süssstoffe", 293, 0.00, 0.2);

@@ -1,0 +1,29 @@
+description: "should return Agavensirup"
+priority: 2
+ignored : false
+request:
+  method: GET
+  url: /foods
+  queryParameters:
+      name: Agavensirup
+response:
+  status: 200
+  headers:
+    Content-Type: application/hal+json;charset=UTF-8
+  body:
+    _links:
+      self:
+#        href: http://localhost:8080/foods?name=Agavensirup
+        href: http://localhost:8080/foods
+      find:
+        href: http://localhost:8080/foods{?name}
+        templated: true
+    totalItems: 1
+    _embedded:
+        foods:
+          -
+            name: "Agavensirup"
+            _links:
+              self:
+                href: http://localhost:8080/foods/5b3877a712f6466db803da0e
+
