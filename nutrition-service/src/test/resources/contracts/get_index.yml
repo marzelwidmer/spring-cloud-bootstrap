@@ -1,0 +1,19 @@
+description: "should return index root API"
+priority: 1
+ignored : false
+request:
+  method: GET
+  url: /
+response:
+  status: 200
+  headers:
+    Content-Type: application/hal+json;charset=UTF-8
+  body:
+      _links:
+        self:
+          href: http://localhost:8080/
+        profile:
+          href: http://localhost:8080/profile
+#          templated: true
+        foods:
+          href: http://localhost:8080/foods

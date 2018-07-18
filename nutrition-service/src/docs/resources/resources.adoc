@@ -1,0 +1,36 @@
+== Index Root
+[[get-index]]
+The index resource provides the entry point into the service.
+
+=== HTTPie request
+A `GET` request is used to access the index entry point.
+include::{snippets}/ContractVerifierTest_validate_get_index/httpie-request.adoc[]
+
+=== curl request
+A `GET` request is used to access the index entry point.
+include::{snippets}/ContractVerifierTest_validate_get_index/curl-request.adoc[]
+
+=== Response body
+include::{snippets}/ContractVerifierTest_validate_get_index/http-response.adoc[]
+
+---
+
+== Food
+The Food resource.
+
+=== Find Foods by name
+[[get-foods-by-name]]
+Search foods by name.
+
+====  HTTPie request
+A `GET` request is used to access the food resources by name query parameter.
+include::{snippets}/ContractVerifierTest_validate_get_foods_by_name/httpie-request.adoc[]
+
+==== curl request
+A `GET` request is used to access the food resources by name query parameter.
+include::{snippets}/ContractVerifierTest_validate_get_foods_by_name/curl-request.adoc[]
+
+==== Response body
+include::{snippets}/ContractVerifierTest_validate_get_foods_by_name/http-response.adoc[]
+
+---

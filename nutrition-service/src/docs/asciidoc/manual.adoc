@@ -1,0 +1,42 @@
+= {project-name} User Guide
+Marcel Widmer <marcel.widmer@helsana.ch>
+{endpoint-url}
+
+:sectanchors:
+:copyright: ©
+:dot: .
+:ellipsis: …
+:hatch: #
+:pilcrow: ¶
+:star: *
+:tilde: ~
+:ul: _
+:revnumber: {project-version}
+ifndef::imagesdir[:imagesdir: images]
+ifndef::sourcedir[:sourcedir: ../../main/java]
+ifndef::testdir[:testdir: ../../test/java]
+
+[context]
+= Context
+Partner data of Helsana customers
+
+[architecture]
+= Architecture
+include::architecture.adoc[]
+
+[[overview-http-verbs]]
+= HTTP verbs
+include::http-verbs.adoc[]
+
+[[overview-http-status-codes]]
+= HTTP status codes
+include::http-status-codes.adoc[]
+
+[[resources]]
+= API Resources
+include::resources.adoc[]
+
+= Release Notes
+[[releaseNotes]]
+include::{gitlogdir}/releaseNotes.adoc[leveloffset=+2]
+

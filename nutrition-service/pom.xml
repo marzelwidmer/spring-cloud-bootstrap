@@ -29,7 +29,29 @@
         <docker.image.prefix>marzelwidmer</docker.image.prefix>
         <opencsv.version>4.1</opencsv.version>
         <evo-inflector.version>1.2.2</evo-inflector.version>
+
+        <!-- Spring Contracts -->
         <spring-cloud-contract.version>2.0.0.RELEASE</spring-cloud-contract.version>
+        <!-- Restdocs -->
+        <spring-restdocs-mockmvc.version>2.0.1.RELEASE</spring-restdocs-mockmvc.version>
+
+        <!-- ================= Package / Release ===================== -->
+        <!-- Package / Release -->
+        <jgitflow-maven-plugin.version>1.0-m5.1</jgitflow-maven-plugin.version>
+
+        <!-- =================  Documentation ================= -->
+        <!-- Asciidoc -->
+        <asciidoctor.maven.plugin.version>1.5.6</asciidoctor.maven.plugin.version>
+
+        <asciidoctorj-diagram.version>1.5.9</asciidoctorj-diagram.version>
+        <asciidoctorj-pdf.version>1.5.0-alpha.16</asciidoctorj-pdf.version>
+        <asciidoctorj.version>1.5.4</asciidoctorj.version>
+        <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
+
+        <!-- Gitlog-->
+        <gitlog-maven-plugin.version>1.13.12</gitlog-maven-plugin.version>
+        <gitlogDirectory>${project.build.directory}/generated-gitlog</gitlogDirectory>
+
     </properties>
 
 
@@ -115,6 +137,11 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
 
         <!-- Test dependencies -->
         <dependency>
@@ -129,11 +156,6 @@
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
@@ -142,6 +164,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-contract-verifier</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-mockmvc</artifactId>
+            <version>${spring-restdocs-mockmvc.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -169,9 +197,166 @@
                 <extensions>true</extensions>
                 <configuration>
                     <baseClassForTests>
-                        ch.keepcalm.cloud.service.nutrition.spring.cloud.springcloudcontractproducer.BaseTestClass
+                        ch.keepcalm.cloud.service.nutrition.BaseTestClass
                     </baseClassForTests>
                 </configuration>
+            </plugin>
+
+            <!-- JGitFlow-->
+            <plugin>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+                <version>${jgitflow-maven-plugin.version}</version>
+                <configuration>
+                    <pushFeatures>true</pushFeatures>
+                    <pushReleases>true</pushReleases>
+                    <pushHotfixes>true</pushHotfixes>
+                    <suppressFastForward>true</suppressFastForward>
+                    <scmCommentPrefix>jgf:</scmCommentPrefix>
+                    <!--enforce line ending-->
+                    <eol>lf</eol>
+                </configuration>
+            </plugin>
+
+            <!-- ===== Documentation ASCIIDOC ===== -->
+            <!-- Gitlog -->
+            <plugin>
+                <groupId>com.github.danielflower.mavenplugins</groupId>
+                <artifactId>gitlog-maven-plugin</artifactId>
+                <version>${gitlog-maven-plugin.version}</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <reportTitle>${project.version}</reportTitle>
+                    <issueManagementSystem>jira</issueManagementSystem>
+                    <issueManagementUrl>https://portal.helsana.ch/jira/browse/CONF/</issueManagementUrl>
+
+                    <fullGitMessage>false</fullGitMessage>
+
+                    <mergeCommitFilter>false</mergeCommitFilter>
+                    <excludeCommitsPattern>^((?!feature.*).)*$</excludeCommitsPattern>
+
+                    <!--<excludeCommitsPattern>^(?!Merge branch.*).*$</excludeCommitsPattern>-->
+                    <!--<excludeCommitsPattern>^((?!MYH-.*).)*$</excludeCommitsPattern>-->
+
+                    <outputDirectory>${gitlogDirectory}</outputDirectory>
+                    <asciidocChangeLogFilename>releaseNotes.adoc</asciidocChangeLogFilename>
+                    <generatAsciidocChangeLog>true</generatAsciidocChangeLog>
+
+                    <generateJSONChangeLog>true</generateJSONChangeLog>
+                    <generateHTMLTableOnlyChangeLog>true</generateHTMLTableOnlyChangeLog>
+                    <generateMarkdownChangeLog>true</generateMarkdownChangeLog>
+                    <generateSimpleHTMLChangeLog>true</generateSimpleHTMLChangeLog>
+                    <generatePlainTextChangeLog>true</generatePlainTextChangeLog>
+
+                    <dateFormat>yyyy-MM-dd HH:mm</dateFormat>
+                    <asciidocTableView>true</asciidocTableView>
+                    <asciidocHeading>===</asciidocHeading>
+                    <asciidocTableViewHeader1>Date</asciidocTableViewHeader1>
+                    <asciidocTableViewHeader2>Changes</asciidocTableViewHeader2>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- AsciiDoc -->
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>${asciidoctor.maven.plugin.version}</version>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj</artifactId>
+                        <version>${asciidoctorj.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj-diagram</artifactId>
+                        <version>${asciidoctorj-diagram.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj-pdf</artifactId>
+                        <version>${asciidoctorj-pdf.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <sourceDirectory>src/docs/asciidoc</sourceDirectory>
+                    <attributes>
+                        <endpoint-url>http://nexusvm.cloudapp.net/service/rest/repository/browse/maven-site/ch/keepcalm/services/nutrition-service/</endpoint-url>
+                        <sourcedir>${project.build.sourceDirectory}</sourcedir>
+                        <sourcedirKotlin>${project.basedir}/src/main/kotlin</sourcedirKotlin>
+                        <gitlogdir>${gitlogDirectory}</gitlogdir>
+                        <project-version>${project.version}</project-version>
+                        <project-name>${project.name}</project-name>
+                        <project-artifact-name>${project.name}-${project.version}</project-artifact-name>
+                        <snippets>${snippetsDirectory}</snippets>
+                    </attributes>
+
+                </configuration>
+
+                <!-- PDF -->
+                <executions>
+                    <execution>
+                        <id>generate-pdf-doc</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>pdf</backend>
+                            <sourceHighlighter>coderay</sourceHighlighter>
+                            <sourceDirectory>src/docs/asciidoc</sourceDirectory>
+                            <baseDir>src/docs/resources</baseDir>
+                            <requires>
+                                <require>asciidoctor-diagram</require>
+                            </requires>
+                            <attributes>
+                                <imagesdir>${project.build.directory}/generated-docs/images</imagesdir>
+                                <imagesoutdir>${project.build.directory}/generated-docs/images</imagesoutdir>
+                                <icons>font</icons>
+                                <pagenums />
+                                <toc />
+                                <idprefix />
+                                <idseparator>-</idseparator>
+                            </attributes>
+                        </configuration>
+                    </execution>
+
+                    <!-- HTML5 -->
+                    <execution>
+                        <id>asciidoc-to-html</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>html5</backend>
+                            <sourceHighlighter>coderay</sourceHighlighter>
+                            <sourceDirectory>src/docs/asciidoc</sourceDirectory>
+                            <baseDir>src/docs/resources</baseDir>
+                            <requires>
+                                <require>asciidoctor-diagram</require>
+                            </requires>
+                            <attributes>
+                                <imagesdir>./images</imagesdir>
+                                <toc>left</toc>
+                                <icons>font</icons>
+                                <sectanchors>true</sectanchors>
+                                <idprefix />
+                                <idseparator>-</idseparator>
+                                <docinfo1>true</docinfo1>
+                            </attributes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Spring-Boot -->
