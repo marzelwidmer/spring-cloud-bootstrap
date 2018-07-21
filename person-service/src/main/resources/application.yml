@@ -4,5 +4,33 @@ spring:
   jackson:
     default-property-inclusion: non_null
 
+  security:
+    user:
+      name: admin
+      password: password
+      roles: ACTUATOR
+
+    jwt:
+      issuer: KeepCalm Auth Portal
+      audience: KeepCalm
+      secret: willbereplacedinalaterversiononceRSAcanbeused
+      roles: keepcalm.user
+
 server:
   port: 4003
+
+---
+# No Spring Cloud Infrastructure is needed
+spring:
+  profiles: standalone
+
+
+# Logging
+logging:
+  pattern:
+     console: "%clr(%d{yy-MM-dd E HH:mm:ss.SSS}){blue} %clr(%-5p) %clr(${PID}){faint}
+          %clr([${spring.zipkin.service.name:${spring.application.name:-}},){magenta}%clr(%X{X-B3-TraceId:-},){yellow}%clr(%X{X-B3-SpanId:-},){cyan}%clr(,%X{X-Span-Export:-}]){blue}%clr([%8.15t]){cyan}
+          %clr(%-40.40logger{0}){blue} %clr(:){red} %clr(%m){faint}%n"
+  level:
+    org.springframework.cloud.client.hypermedia: DEBUG
+    ch.keepcalm.cloud.service.security: TRACE

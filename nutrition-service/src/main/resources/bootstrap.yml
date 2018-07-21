@@ -12,3 +12,16 @@ eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_SERVICE_URL:http://eureka:password@localhost:8061/eureka/}
+
+
+---
+spring:
+  profiles: standalone
+  cloud:
+    config:
+      enabled: false
+      discovery:
+        enabled: false
+eureka:
+  client:
+    enabled: false
