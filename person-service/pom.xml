@@ -27,8 +27,9 @@
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
         <docker-maven-plugin.version>1.0.0</docker-maven-plugin.version>
         <docker.image.prefix>marzelwidmer</docker.image.prefix>
-        <opencsv.version>4.1</opencsv.version>
         <evo-inflector.version>1.2.2</evo-inflector.version>
+        <jjwt.version>0.9.0</jjwt.version>
+
     </properties>
 
 
@@ -37,6 +38,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
 
         <!-- Spring HATEOAS -->
@@ -63,6 +69,12 @@
             <artifactId>spring-cloud-sleuth-zipkin</artifactId>
         </dependency>
 
+        <!-- Feign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
         <!-- Spring Actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -74,6 +86,14 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
+
+        <!-- Spring Configuration Processor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- EVO -->
         <dependency>
             <groupId>org.atteo</groupId>

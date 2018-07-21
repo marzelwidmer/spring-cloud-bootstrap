@@ -1,4 +1,4 @@
-package ch.keepcalm.cloud.service.config;
+package ch.keepcalm.cloud.service.person.config;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
