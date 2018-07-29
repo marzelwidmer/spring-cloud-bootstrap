@@ -24,6 +24,7 @@
         <module>foo-service</module>
         <module>bar-service</module>
         <module>person-service</module>
+        <module>uaa-service</module> <!--user authentication authorization service-->
     </modules>
 
 </project>

@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: uaa-service
+
+  cloud:
+    config:
+      enabled: false
+
+eureka:
+  client:
+    enabled: false
