@@ -7,4 +7,3 @@ spring:
       username: config
       password: password
       uri: http://localhost:8088
-  zipkin.baseUrl: http://zipkin-service/
