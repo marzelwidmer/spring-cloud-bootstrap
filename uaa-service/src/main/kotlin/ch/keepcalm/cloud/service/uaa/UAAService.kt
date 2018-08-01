@@ -1,20 +1,48 @@
 package ch.keepcalm.cloud.service.uaa
 
+import com.nulabinc.zxcvbn.Zxcvbn
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.repository.CrudRepository
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.stereotype.Repository
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import javax.persistence.*
+import javax.validation.constraints.Email
+import javax.validation.constraints.NotEmpty
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Bean
+import org.springframework.stereotype.Service
+import org.springframework.mail.SimpleMailMessage
+import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.scheduling.annotation.Async
+import org.springframework.stereotype.Controller
+import org.springframework.validation.BindingResult
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.servlet.ModelAndView
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import javax.validation.Valid
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import java.util.*
+import javax.servlet.http.HttpServletRequest
 
+//https://www.codebyamir.com/blog/user-account-registration-with-spring-boot
 
 @SpringBootApplication
 @EnableWebSecurity
-class UAAService
+class UAAService() {
+    @Bean
+    fun getBCryptPasswordEncoder(): BCryptPasswordEncoder = BCryptPasswordEncoder()
+
+}
 
 fun main(args: Array<String>) {
     runApplication<UAAService>(*args)
@@ -28,15 +56,203 @@ class WebConfig : WebMvcConfigurer {
         registry.addViewController("/sign-in").setViewName("sign-in")
         registry.addViewController("/login").setViewName("login")
         registry.addViewController("/user-info").setViewName("user-info")
-//        registry.addViewController("/").setViewName("redirect:/message")
+        registry.addViewController("/register").setViewName("register")
+        registry.addViewController("/confirm").setViewName("confirm")
     }
 }
 
 
+@Entity
+@Table(name = "user")
+data class User(
+
+        @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+        @Column(name = "id")
+        val id: Long = 0,
+
+
+        @Column(name = "email", nullable = false, unique = true)
+        @Email(message = "Please provide a valid e-mail")
+        @NotEmpty(message = "Please provide an e-mail")
+        var email: String = "",
+
+        @Column(name = "password")
+        @Transient
+        var password: String = "",
+
+        @Column(name = "first_name")
+        @NotEmpty(message = "Please provide your first name")
+        var firstName: String = "",
+
+        @Column(name = "last_name")
+        @NotEmpty(message = "Please provide your last name")
+        var lastName: String = "",
+
+        @Column(name = "enabled")
+        var enabled: Boolean = false,
+
+        @Column(name = "confirmation_token")
+        var confirmationToken: String = ""
+
+)
+
+
+@Repository("userRepository")
+interface UserRepository : CrudRepository<User, Long> {
+
+    fun findByEmail(email: String): Optional<User>
+    fun findByConfirmationToken(confirmationToken: String): Optional<User>
+}
+
+
+@Service("userService")
+class UserService(private val userRepository: UserRepository) {
+
+
+    fun findByEmail(email: String): Optional<User> =
+            userRepository.findByEmail(email)
+
+    fun findByConfirmationToken(confirmationToken: String): Optional<User> =
+            userRepository.findByConfirmationToken(confirmationToken)
+
+
+    fun saveUser(user: User) =
+            userRepository.save(user)
+
+
+}
+
+
+@Service("emailService")
+class EmailService @Autowired
+constructor(private val mailSender: JavaMailSender) {
+
+    @Async
+    fun sendEmail(email: SimpleMailMessage) {
+        mailSender.send(email)
+    }
+}
+
+
+@Controller
+class RegisterController(
+        private val bCryptPasswordEncoder: BCryptPasswordEncoder,
+        private val userService: UserService,
+        private val emailService: EmailService
+) {
+
+    // Return registration form template
+    @RequestMapping(value = "/register", method = arrayOf(RequestMethod.GET))
+    fun showRegistrationPage(modelAndView: ModelAndView, user: User): ModelAndView {
+        modelAndView.addObject("user", user)
+        modelAndView.viewName = "register"
+        return modelAndView
+    }
+
+
+    // Process form input data
+    @RequestMapping(value = "/register", method = arrayOf(RequestMethod.POST))
+    fun processRegistrationForm(modelAndView: ModelAndView, @Valid user: User, bindingResult: BindingResult, request: HttpServletRequest): ModelAndView {
+
+        // Lookup user in database by e-mail
+        val userExists = userService.findByEmail(user.email)
+
+        System.out.println(userExists)
+
+
+        if (userExists.isPresent) {
+            modelAndView.addObject("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.")
+            modelAndView.viewName = "register"
+            bindingResult.reject("email")
+        }
+
+        if (bindingResult.hasErrors()) {
+            modelAndView.viewName = "register"
+        } else { // new user so we create user and send confirmation e-mail
+
+            // Disable user until they click on confirmation link in email
+            user.enabled = false
+
+            // Generate random 36-character string token for confirmation link
+            user.confirmationToken = UUID.randomUUID().toString()
+
+            userService.saveUser(user)
+
+            val appUrl = "${request.scheme}://${request.serverName}:${request.serverPort}"
+
+            val registrationEmail = SimpleMailMessage()
+            registrationEmail.setTo(user.email!!)
+            registrationEmail.setSubject("Registration Confirmation")
+            registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
+                    + appUrl + "/confirm?token=" + user.confirmationToken)
+            registrationEmail.setFrom("noreply@domain.com")
+
+            emailService.sendEmail(registrationEmail)
+
+            modelAndView.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + user.email)
+            modelAndView.viewName = "register"
+        }
+
+        return modelAndView
+    }
+
+    // Process confirmation link
+    @RequestMapping(value = "/confirm", method = arrayOf(RequestMethod.GET))
+    fun showConfirmationPage(modelAndView: ModelAndView, @RequestParam("token") token: String): ModelAndView {
+
+        val user = userService.findByConfirmationToken(token)
+
+        if (user.isPresent) { // Token found
+            modelAndView.addObject("confirmationToken", user.get().confirmationToken)
+        } else {// No token found in DB
+            modelAndView.addObject("invalidToken", "Oops!  This is an invalid confirmation link.")
+        }
+
+        modelAndView.viewName = "confirm"
+        return modelAndView
+    }
+
+    // Process confirmation link
+    @RequestMapping(value = "/confirm", method = arrayOf(RequestMethod.POST))
+    fun processConfirmationForm(modelAndView: ModelAndView, bindingResult: BindingResult, @RequestParam requestParams: Map<*, *>, redir: RedirectAttributes): ModelAndView {
+
+        modelAndView.viewName = "confirm"
+
+        val passwordCheck = Zxcvbn()
+
+        val strength = passwordCheck.measure(requestParams["password"] as String?)
+
+        if (strength.getScore() < 3) {
+            bindingResult.reject("password")
+
+            redir.addFlashAttribute("errorMessage", "Your password is too weak.  Choose a stronger one.")
+
+            modelAndView.viewName = "redirect:confirm?token=" + requestParams["token"]
+            println(requestParams["token"])
+            return modelAndView
+        }
+
+        // Find the user associated with the reset token
+        val user = userService.findByConfirmationToken(requestParams["token"] as String).get()
+
+        // Set new password
+        user.password = bCryptPasswordEncoder.encode(requestParams["password"] as CharSequence?)
+
+        // Set user to enabled
+        user!!.enabled = true
+
+        // Save user
+        userService.saveUser(user)
+
+        modelAndView.addObject("successMessage", "Your password has been set!")
+        return modelAndView
+    }
+
+}
 
 @Configuration
 @EnableWebSecurity
-class WebSecurityConfig constructor(val userDetailsService : UserDetailsService) : WebSecurityConfigurerAdapter() {
+class WebSecurityConfig constructor(val userDetailsService: UserDetailsService) : WebSecurityConfigurerAdapter() {
 
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userDetailsService)
@@ -63,31 +279,6 @@ class WebSecurityConfig constructor(val userDetailsService : UserDetailsService)
                 .anyRequest().permitAll()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //

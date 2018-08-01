@@ -15,6 +15,15 @@ spring:
     servlet:
       content-type: text/html
 
+  mail:
+    host: smtp.mailhost.com
+    username : mailUser
+    password : mailPass
+    port : 587
+    properties:
+      mail.smtp.auth : true
+      mail.smtp.starttls.enable : true
+
 server:
   port: 8063
 
