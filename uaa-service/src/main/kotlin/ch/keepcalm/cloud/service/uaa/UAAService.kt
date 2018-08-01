@@ -58,6 +58,7 @@ class WebConfig : WebMvcConfigurer {
         registry.addViewController("/user-info").setViewName("user-info")
         registry.addViewController("/register").setViewName("register")
         registry.addViewController("/confirm").setViewName("confirm")
+
     }
 }
 
