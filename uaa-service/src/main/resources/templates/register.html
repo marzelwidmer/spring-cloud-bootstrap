@@ -18,19 +18,19 @@
 
         <h4>New User Registration</h4>
 
-        <form autocomplete="off" action="#" th:action="@{/register}" th:object="${user}" method="post" class="m-t"
-              role="form" data-toggle="validator">
 
-            <div th:if="${confirmationMessage}" class="alert alert-success" role="alert"
-                 th:text=${confirmationMessage}></div>
-            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+        <div th:if="${confirmationMessage}" class="alert alert-success" role="alert"
+             th:text=${confirmationMessage}></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
 
-            <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
-                 class="validation-message alert alert-danger" role="alert"></div>
-            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
-                 class="validation-message alert alert-danger" role="alert"></div>
-            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-                 class="validation-message alert alert-danger" role="alert"></div>
+
+        <form autocomplete="off" action="#" th:action="@{/register}" th:object="${user}" method="post" class="m-t" role="form" data-toggle="validator">
+
+            <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="validation-message alert alert-danger" role="alert"></div>
+            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="validation-message alert alert-danger" role="alert"></div>
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message alert alert-danger" role="alert"></div>
+
+
 
             <div class="form-group input-group has-feedback">
                 <label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
@@ -65,9 +65,7 @@
 
 
             <button type="submit" class="btn btn-primary block full-width m-b">Register</button>
-
         </form>
-
 
     </div>
     <div th:replace="/fragments/footer :: footer"/>

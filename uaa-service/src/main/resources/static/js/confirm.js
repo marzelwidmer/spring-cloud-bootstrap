@@ -3,9 +3,9 @@ $(document).ready(function() {
         .formValidation({
         framework: 'bootstrap',
         icon: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
+            valid: 'fa fa-ok',
+            invalid: 'fa fa-remove',
+            validating: 'fa fa-refresh'
         },
         fields: {
 

@@ -7,7 +7,7 @@
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" th:href="@{/css/sign-in.css}"
-          href="/css/confirm.css" />
+          href="/css/confirm.css"/>
 
 </head>
 <body class="gray-bg">
@@ -15,55 +15,44 @@
 <div class="middle-box text-center loginscreen animated fadeInDown">
     <div>
 
-        <hr />
+        <hr/>
         <h4>Set Your Password</h4>
 
-        <i class="fa fa-user-o" aria-hidden="true"></i>
+
+        <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text=${successMessage}></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text=${errorMessage}></div>
+        <div th:if="${invalidToken}" class="alert alert-danger" role="alert" th:text=${invalidToken}></div>
+
+        <form th:if="!${invalidToken}" class="m-t" id="passwordForm" role="form" action="#" th:object="${setPassword}"
+              th:action="@{/confirm}" method="post">
 
 
+            <input type="hidden" name="token" th:value=${confirmationToken}>
 
-
-        <div th:if="${successMessage}" class="alert alert-success"
-             role="alert" th:text=${successMessage}></div>
-
-        <div th:if="${errorMessage}" class="alert alert-danger"
-             role="alert" th:text=${errorMessage}></div>
-
-        <div th:if="${invalidToken}" class="alert alert-danger"
-             role="alert" th:text=${invalidToken}></div>
-
-        <form th:if="!${invalidToken}" class="m-t" id="passwordForm" role="form" action="#"  th:object="${setPassword}" th:action="@{/confirm}" method="post">
-
-            <input type="hidden" name="token" th:value=${confirmationToken}  >
-
-            <div class="form-group input-group">
-          <span class="input-group-addon">
-            <span class="glyphicon glyphicon-lock"></span>
-          </span>
-                <input name="password" type="password" id="password"
-                       placeholder="Password" class="form-control" required />
-                <span class="glyphicon"
-                      aria-hidden="true"></span>
+            <div class="form-group input-group has-feedback">
+                <span class="input-group-addon">
+                    <span class="fa fa-lock" style="font-size:20px; padding: 10px"></span>
+                </span>
+                <input name="password" type="password" id="password" placeholder="Password" class="form-control"
+                       required/>
+                <span class="fa form-control-feedback" aria-hidden="true" style="font-size:20px"></span>
             </div>
 
             <div class="form-group input-group has-feedback">
-          <span class="input-group-addon">
-            <span class="glyphicon glyphicon-lock"></span>
-          </span>
+                <span class="input-group-addon">
+                    <span class="fa fa-lock" style="font-size:20px; padding: 10px"></span>
+                </span>
                 <input type="password" class="form-control" id="signup-password-confirm" placeholder="Confirm Password" name="ConfirmPassword" data-fv-notempty="true"
                        data-fv-notempty-message="Please confirm password"
                        data-fv-identical="true"
                        data-fv-identical-field="password"
-                       data-fv-identical-message="Both passwords must be identical" />
-
+                       data-fv-identical-message="Both passwords must be identical"/>
                 <div class="help-block with-errors"></div>
+                <span class="fa form-control-feedback" aria-hidden="true" style="font-size:20px"></span>
             </div>
 
 
-
-            <button type="submit"
-                    class="btn btn-primary block full-width m-b">Save
-            </button>
+            <button type="submit" class="btn btn-primary block full-width m-b">Save</button>
 
         </form>
 
