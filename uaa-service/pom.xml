@@ -32,10 +32,13 @@
         <!--bootstrap, jquery, propper -->
         <webjars-locator.version>0.34</webjars-locator.version>
         <bootstrap.version>4.1.2</bootstrap.version>
-        <jquery.version>3.3.1-1</jquery.version>
+        <jquery.version>3.3.1</jquery.version>
         <popper.js.version>1.14.3</popper.js.version>
         <jquery-validation.version>1.17.0</jquery-validation.version>
         <font-awesome.version>4.7.0</font-awesome.version>
+
+        <smartwizard.version>4.3.1</smartwizard.version>
+        <github-com-1000hz-bootstrap-validator.version>0.11.5</github-com-1000hz-bootstrap-validator.version>
     </properties>
 
 
@@ -101,7 +104,8 @@
             <version>${bootstrap.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.webjars</groupId>
+            <groupId>org.webjars.npm</groupId>
+            <!--<groupId>org.webjars</groupId>-->
             <artifactId>jquery</artifactId>
             <version>${jquery.version}</version>
         </dependency>
@@ -120,8 +124,29 @@
             <artifactId>font-awesome</artifactId>
             <version>${font-awesome.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>smartwizard</artifactId>
+            <version>${smartwizard.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.webjars.npm</groupId>
+                    <artifactId>bootstrap</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
 
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>github-com-1000hz-bootstrap-validator</artifactId>
+            <version>${github-com-1000hz-bootstrap-validator.version}</version>
+        </dependency>
+        <!--     <dependency>
+                 <groupId>org.webjars.bower</groupId>
+                 <artifactId>jquery</artifactId>
+                 <version>1.11.1</version>
+             </dependency>-->
 
 
         <!-- Spring Web -->

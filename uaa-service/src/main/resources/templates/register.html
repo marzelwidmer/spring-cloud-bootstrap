@@ -3,11 +3,11 @@
 <head>
     <title>UAA</title>
 
-    <div th:replace="fragments/header :: header-css"/>
+    <!--/*/ <th:block th:include="fragments/headerinc :: headerinc"></th:block> /*/-->
+
 
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" th:href="@{/css/sign-in.css}"
-          href="/css/register.css"/>
+    <link rel="stylesheet" th:href="@{/css/sign-in.css}" href="/css/register.css"/>
 
 
 </head>
@@ -73,4 +73,6 @@
 
 
 </body>
+<!--/*/ <th:block th:include="fragments/footerinc :: footerinc"></th:block> /*/-->
+
 </html>
