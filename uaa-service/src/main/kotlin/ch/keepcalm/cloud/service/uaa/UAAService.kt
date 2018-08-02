@@ -60,18 +60,17 @@ class WebConfig : WebMvcConfigurer {
 
 
 
-        registry.addViewController("/sign-up").setViewName("/v1/sign-up")
-        registry.addViewController("/sign-in").setViewName("/v1/sign-in")
-        registry.addViewController("/user-info").setViewName("/v1/user-info")
+        registry.addViewController("/sign-up").setViewName("/sign-up")
+        registry.addViewController("/sign-in").setViewName("/sign-in")
+        registry.addViewController("/user-info").setViewName("/user-info")
 
 
         registry.addViewController("/register").setViewName("/register")
         registry.addViewController("/confirm").setViewName("/confirm")
 
 
-        registry.addViewController("/login").setViewName("/v0/login")
-        registry.addViewController("/admin").setViewName("/v0/admin")
-        registry.addViewController("/about").setViewName("/v0/about")
+        registry.addViewController("/login").setViewName("/login")
+        registry.addViewController("/admin").setViewName("/admin")
 
     }
 }

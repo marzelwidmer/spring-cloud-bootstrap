@@ -6,18 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Include Bootstrap CSS -->
-    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
     <link th:href="@{//webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" >
 
     <!-- Include SmartWizard CSS -->
-    <!--<link href="smartwizard/dist/css/smart_wizard.css" rel="stylesheet" type="text/css" />-->
     <link th:href="@{//webjars/smartwizard/dist/css/smart_wizard.css}" rel="stylesheet">
 
     <!-- Optional SmartWizard theme -->
-    <!--<link href="smartwizard/dist/css/smart_wizard_theme_circles.css" rel="stylesheet" type="text/css" />-->
-    <!--<link href="smartwizard/dist/css/smart_wizard_theme_arrows.css" rel="stylesheet" type="text/css" />-->
-    <!--<link href="smartwizard/dist/css/smart_wizard_theme_dots.css" rel="stylesheet" type="text/css" />-->
-
     <link th:href="@{//webjars/smartwizard/dist/css/smart_wizard_theme_circles.css}" rel="stylesheet">
     <link th:href="@{//webjars/smartwizard/dist/css/smart_wizard_theme_arrows.css}" rel="stylesheet">
     <link th:href="@{//webjars/smartwizard/dist/css/smart_wizard_theme_dots.css}" rel="stylesheet">
@@ -91,20 +85,21 @@
     </div>
 
     <!-- Include jQuery -->
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>-->
-    <script th:src="@{/webjars/jquery/dist/jquery.min.js}" />
+    <!--<script th:src="@{/webjars/jquery/dist/jquery.min.js}" />-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
 
     <!-- Include jQuery Validator plugin -->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>-->
     <!--<script th:src="@{/webjars/github-com-1000hz-bootstrap-validator/dist/validator.min.js}" />-->
-    <!-- have to load it from own resources ....  TODO analyze why -->
-    <script type="text/javascript" src="js/validator.min.js"></script>
+    <!-- have to load it from own resources .... -->
+    <script type="text/javascript" src="js/1000hz-bootstrap-validator/validator.min.js"></script>
 
 
     <!-- Include SmartWizard JavaScript source -->
     <!--<script th:src="@{/webjars/smartwizard/dist/js/jquery.smartWizard.min.js}" />-->
     <!-- have to load it from own resources ....  TODO analyze why -->
-    <script type="text/javascript" src="js/jquery.smartWizard.min.js"></script>
+    <script type="text/javascript" src="js/smartWizard/jquery.smartWizard.min.js"></script>
 
     <script type="text/javascript" src="js/registration.js"></script>
 

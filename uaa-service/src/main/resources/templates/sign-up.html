@@ -3,7 +3,7 @@
 <head>
     <title>UAA</title>
 
-    <div th:replace="fragments/header :: header-css"/>
+    <!--/*/ <th:block th:include="fragments/headerinc :: headerinc"></th:block> /*/-->
 
      <link rel="stylesheet" th:href="@{/css/sign-in.css}" href="/css/sign-up.css" />
 
@@ -70,8 +70,9 @@
         </div>
     </div>
 </div>
+<!--/*/ <th:block th:include="fragments/footerinc :: footerinc"></th:block> /*/-->
 
-<script type="text/javascript" src="/js/sign-up.js"></script>
+<script type="text/javascript" src="js/sign-up.js"></script>
 
 </body>
 </html>
