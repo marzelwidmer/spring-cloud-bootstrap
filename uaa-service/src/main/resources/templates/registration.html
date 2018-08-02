@@ -34,6 +34,9 @@
                     <small>Address</small>
                 </a></li>
                 <li><a href="#step-4">Step 4<br/>
+                    <small>Password</small>
+                </a></li>
+                <li><a href="#step-5">Step 5<br/>
                     <small>Terms and Conditions</small>
                 </a></li>
             </ul>
@@ -70,12 +73,28 @@
                         </div>
                     </div>
                 </div>
-                <div id="step-4" class="">
+                <div id="step-4">
+                    <h2>Your Address</h2>
+                    <div id="form-step-3" role="form" data-toggle="validator">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input class="form-control input-lg" placeholder="Enter your Password" id="password" name="password" value="" type="password"
+                                   required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" onkeyup='check();'>
+
+                            <input class="form-control input-lg" placeholder="Confirm your Password" id="confirm_password" name="confirm_password" value="" type="password"
+                                   required onkeyup="check();" >
+                            <div class="help-block with-errors">
+                                <span id='message'></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="step-5" class="">
                     <h2>Terms and Conditions</h2>
                     <p>
                         Terms and conditions: Keep your smile :)
                     </p>
-                    <div id="form-step-3" role="form" data-toggle="validator">
+                    <div id="form-step-4" role="form" data-toggle="validator">
                         <div class="form-group">
                             <label for="terms">I agree with the T&C</label>
                             <input type="checkbox" id="terms" data-error="Please accept the Terms and Conditions" required>
@@ -107,6 +126,8 @@
 <script type="text/javascript" src="js/smartWizard/jquery.smartWizard.min.js"></script>
 
 <script type="text/javascript" src="js/registration.js"></script>
+
+
 
 
 </body>

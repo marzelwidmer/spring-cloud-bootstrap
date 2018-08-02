@@ -1,8 +1,20 @@
+var check = function() {
+    if (document.getElementById('password').value ==
+        document.getElementById('confirm_password').value) {
+        document.getElementById('message').style.color = 'green';
+        document.getElementById('message').innerHTML = 'matching';
+    } else {
+        document.getElementById('message').style.color = 'red';
+        document.getElementById('message').innerHTML = 'not matching';
+    }
+}
+
 $(document).ready(function(){
 
     // Toolbar extra buttons
     var btnFinish = $('<button></button>').text('Finish')
         .addClass('btn btn-info')
+
         .on('click', function(){
             if( !$(this).hasClass('disabled')){
                 var elmForm = $("#myForm");
@@ -34,7 +46,8 @@ $(document).ready(function(){
         selected: 0,
         theme: 'dots',
         transitionEffect:'fade',
-        toolbarSettings: {toolbarPosition: 'bottom',
+        toolbarSettings: {
+            toolbarPosition: 'bottom',
             toolbarExtraButtons: [btnFinish, btnCancel]
         },
         anchorSettings: {
@@ -61,12 +74,9 @@ $(document).ready(function(){
     });
 
     $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection) {
+        $('.btn-finish').addClass('disabled');
         // Enable finish button only on last step
-        if(stepNumber == 3){
-            $('.btn-finish').removeClass('disabled');
-        }else{
-            $('.btn-finish').addClass('disabled');
-        }
+        if(stepNumber == 4) $('.btn-info').removeClass('disabled');
     });
 
 });
