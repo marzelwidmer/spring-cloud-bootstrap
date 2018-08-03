@@ -31,7 +31,7 @@
 
         <!--bootstrap, jquery, propper -->
         <webjars-locator.version>0.34</webjars-locator.version>
-        <bootstrap.version>4.1.2</bootstrap.version>
+        <bootstrap.version>3.3.7</bootstrap.version>  <!-- 4.1.2 -->
 
         <jquery.version>1.11.1</jquery.version>
 
@@ -40,7 +40,7 @@
         <font-awesome.version>4.7.0</font-awesome.version>
 
         <smartwizard.version>4.3.1</smartwizard.version>
-        <github-com-1000hz-bootstrap-validator.version>0.11.5</github-com-1000hz-bootstrap-validator.version>
+        <github-com-1000hz-bootstrap-validator.version>0.11.9</github-com-1000hz-bootstrap-validator.version>
     </properties>
 
 
@@ -57,7 +57,11 @@
             <artifactId>bootstrap</artifactId>
             <version>${bootstrap.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${jquery.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery-validation</artifactId>
@@ -84,6 +88,19 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+         <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>github-com-1000hz-bootstrap-validator</artifactId>
+            <version>${github-com-1000hz-bootstrap-validator.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.webjars.npm</groupId>
+                    <artifactId>bootstrap</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
 
 
 

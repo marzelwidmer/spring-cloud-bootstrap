@@ -55,6 +55,10 @@ class WebConfig : WebMvcConfigurer {
 
         registry.addViewController("/registration").setViewName("/registration")
 
+        registry.addViewController("/test1").setViewName("/test1")
+
+
+
         registry.addViewController("/foo").setViewName("/foo")
         registry.addViewController("/wizard").setViewName("/wizard")
 

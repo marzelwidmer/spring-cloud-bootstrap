@@ -28,10 +28,10 @@
                     <small>Email Address</small>
                 </a></li>
                 <li><a href="#step-2">Step 2<br/>
-                    <small>Name</small>
+                    <small>First Name</small>
                 </a></li>
                 <li><a href="#step-3">Step 3<br/>
-                    <small>Address</small>
+                    <small>Last Name</small>
                 </a></li>
                 <li><a href="#step-4">Step 4<br/>
                     <small>Password</small>
@@ -51,45 +51,51 @@
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
-
                 </div>
                 <div id="step-2">
-                    <h2>Your Name</h2>
+                    <h2>Your First Name</h2>
                     <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
-                            <label for="name">Name:</label>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="Write your name" required>
+                            <label for="firstName">First Name:</label>
+                            <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Write your first name" required>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                 </div>
                 <div id="step-3">
-                    <h2>Your Address</h2>
+                    <h2>Your Last Name</h2>
                     <div id="form-step-2" role="form" data-toggle="validator">
                         <div class="form-group">
-                            <label for="address">Address</label>
-                            <textarea class="form-control" name="address" id="address" rows="3" placeholder="Write your address..." required></textarea>
+                            <label for="lastName">Last Name:</label>
+                            <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Write your last name" required>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                 </div>
+
                 <div id="step-4">
-                    <h2>Your Address</h2>
+                    <h2>Your Password</h2>
                     <div id="form-step-3" role="form" data-toggle="validator">
                         <div class="form-group">
-                            <label for="password">Password</label>
-                            <input class="form-control input-lg" placeholder="Enter your Password" id="password" name="password" value="" type="password"
-                                   required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" onkeyup='check();'>
+                            <label for="inputPassword">Password</label>
+                            <input type="password" data-minlength="8" class="form-control" id="inputPassword" placeholder="Password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" required>
+                            <div class="help-block">Minimum of 8 characters and at least one capital letter</div>
+                            <div class="help-block with-errors"></div>
+                        </div>
 
-                            <input class="form-control input-lg" placeholder="Confirm your Password" id="confirm_password" name="confirm_password" value="" type="password"
-                                   required onkeyup="check();" >
-                            <div class="help-block with-errors">
-                                <span id='message'></span>
-                            </div>
+                        <div class="form-group">
+                            <label for="inputPasswordConfirm">Confirm Password</label>
+
+                            <input type="password" class="form-control" id="inputPasswordConfirm" data-match="#inputPassword" data-match-error="Whoops, these don't match"
+                                   placeholder="Confirm" required>
+
+                            <div class="help-block"></div>
+                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                 </div>
-                <div id="step-5" class="">
+
+                <div id="step-5">
                     <h2>Terms and Conditions</h2>
                     <p>
                         Terms and conditions: Keep your smile :)
@@ -109,25 +115,20 @@
 </div>
 
 <!-- Include jQuery -->
-<!--<script th:src="@{/webjars/jquery/dist/jquery.min.js}" />-->
+<!--<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}" />-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
 
 <!-- Include jQuery Validator plugin -->
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>-->
 <!--<script th:src="@{/webjars/github-com-1000hz-bootstrap-validator/dist/validator.min.js}" />-->
-<!-- have to load it from own resources .... -->
 <script type="text/javascript" src="js/1000hz-bootstrap-validator/validator.min.js"></script>
 
 
 <!-- Include SmartWizard JavaScript source -->
 <!--<script th:src="@{/webjars/smartwizard/dist/js/jquery.smartWizard.min.js}" />-->
-<!-- have to load it from own resources ....  TODO analyze why -->
 <script type="text/javascript" src="js/smartWizard/jquery.smartWizard.min.js"></script>
-
 <script type="text/javascript" src="js/registration.js"></script>
-
-
 
 
 </body>

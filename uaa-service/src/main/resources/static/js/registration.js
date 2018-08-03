@@ -1,19 +1,9 @@
-var check = function() {
-    if (document.getElementById('password').value ==
-        document.getElementById('confirm_password').value) {
-        document.getElementById('message').style.color = 'green';
-        document.getElementById('message').innerHTML = 'matching';
-    } else {
-        document.getElementById('message').style.color = 'red';
-        document.getElementById('message').innerHTML = 'not matching';
-    }
-}
-
 $(document).ready(function(){
 
-    // Toolbar extra buttons
-    var btnFinish = $('<button></button>').text('Finish')
-        .addClass('btn btn-info')
+    // Toolbar extra buttons    onClick="if(this.className.indexOf('disabled') == -1){btnFinish(this);}"
+    var btnFinish = $('<button id="btnFinish"> ></button>')
+        .text('Finish')
+        .addClass('btn btn-info disabled')
 
         .on('click', function(){
             if( !$(this).hasClass('disabled')){
@@ -22,10 +12,10 @@ $(document).ready(function(){
                     elmForm.validator('validate');
                     var elmErr = elmForm.find('.has-error');
                     if(elmErr && elmErr.length > 0){
-                        alert('Oops we still have error in the form');
+                        // alert('Oops we still have error in the form');
                         return false;
                     }else{
-                        alert('Great! we are ready to submit form');
+                        // alert('Great! we are ready to submit form');
                         elmForm.submit();
                         return false;
                     }
@@ -48,7 +38,9 @@ $(document).ready(function(){
         transitionEffect:'fade',
         toolbarSettings: {
             toolbarPosition: 'bottom',
-            toolbarExtraButtons: [btnFinish, btnCancel]
+            toolbarExtraButtons: [
+                btnFinish,
+                btnCancel]
         },
         anchorSettings: {
             markDoneStep: true, // add done css
@@ -74,9 +66,24 @@ $(document).ready(function(){
     });
 
     $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection) {
-        $('.btn-finish').addClass('disabled');
+        $('.btnFinish').addClass('disabled');
         // Enable finish button only on last step
-        if(stepNumber == 4) $('.btn-info').removeClass('disabled');
+        if(stepNumber == 5){
+            $('#btnFinish').removeClass('disabled');
+        }
     });
+
+});
+
+
+var $checkBoxes = $(":checkbox").on("change", function () { // Here listening the changes on checkbox using on()
+    // $checkBoxes.removeClass("change").attr("checked", false); // remove the class from existing Checkbox
+    // $(this).addClass("change").attr("checked", true); // adding the class for the currenly checked checkbox
+
+    if($("#terms").is(":checked") == true){ // check if terms checkbox is activated for remive finish disabled class
+        $('#btnFinish').removeClass('disabled');
+    }else {
+        $('#btnFinish').addClass('disabled');
+    }
 
 });
