@@ -66,30 +66,13 @@ $(document).ready(function () {
                 return false;
             }
 
-
-            // Password Validation
+            // Password Validation on step 3
             if (stepNumber == 3) {
-                if ($("#inputPassword")) { // check if there a inputPassword
-                    var password = $("#inputPassword").val();
-
-                    var result = zxcvbn(password),
-                        score = result.score,
-                        message = result.feedback.warning || 'The password is weak';
-
-                    // We will treat the password as an invalid one if the score is less than 3
-                    if (score < 3) {
-                        console.log(message)
-                        console.log(result)
-                        console.log(score)
-                        $('#passwordAlert').text(message);
-                        $('#passwordAlert').removeAttr( 'style' );
-                        // Form validation failed
-                        return false;
-                    }
-                    $('#passwordAlert').attr("style", "display:none");
+                var score = $('.foo').checkPasswordScore();
+                if(score < 3){
+                    return false;
                 }
             }
-
 
         }
         return true;
@@ -102,6 +85,34 @@ $(document).ready(function () {
             $('#btnFinish').removeClass('disabled');
         }
     });
+});
+
+$.fn.checkPasswordScore = function () {
+    if ($("#inputPassword")) { // check if there a inputPassword
+        var password = $("#inputPassword").val();
+
+        var result = zxcvbn(password),
+            score = result.score,
+            calc_time = result.calc_time,
+            suggestions = result.feedback.suggestions,
+            message = result.feedback.warning || 'The password is weak';
+
+        var msg = result.feedback.warning  + "it took  " + calc_time + "ms to calculate an answer,  " + suggestions
+
+        // We will treat the password as an invalid one if the score is less than 3
+        if (score < 3) {
+            $('#passwordAlert').text("The password is weak. " + msg);
+            $('#passwordAlert').addClass("alert-danger")
+        } else {
+            $('#passwordAlert').text("The password is strong. " + msg);
+            $('#passwordAlert').removeClass("alert-danger")
+            $('#passwordAlert').addClass('alert-success')
+        }
+        return score
+    }
+};
+$("#inputPassword").keyup(function () {
+    $('.foo').checkPasswordScore()
 });
 
 
