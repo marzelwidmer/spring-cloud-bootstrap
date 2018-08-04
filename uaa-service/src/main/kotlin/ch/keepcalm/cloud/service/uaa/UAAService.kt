@@ -24,15 +24,14 @@ import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Controller
 import org.springframework.validation.BindingResult
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import javax.validation.Valid
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.web.bind.annotation.*
 import java.util.*
 import javax.servlet.http.HttpServletRequest
+import javax.swing.text.html.HTML.Tag.U
 
 //https://www.codebyamir.com/blog/user-account-registration-with-spring-boot
 
@@ -55,7 +54,6 @@ class WebConfig : WebMvcConfigurer {
 
         registry.addViewController("/registration").setViewName("/registration")
 
-        registry.addViewController("/test1").setViewName("/test1")
 
 
 
@@ -159,8 +157,107 @@ class RegisterController(
         private val emailService: EmailService
 ) {
 
+    @GetMapping(value = ["/registration"])
+    fun registrationPage(modelAndView: ModelAndView, user: User): ModelAndView {
+        modelAndView.addObject("user", User(firstName = "John", lastName = "Doe", password = "12345678A", email = "marzelwidmer@gmail.com", confirmationToken = "123"))
+
+//        modelAndView.addObject("user", user)
+        modelAndView.viewName = "registration"
+        return modelAndView
+    }
+
+    //    // Process form input data
+    @PostMapping(value = ["/registration"])
+    fun registrationForm(modelAndView: ModelAndView,  user: User, bindingResult: BindingResult, request: HttpServletRequest): ModelAndView {
+
+        // Lookup user in database by e-mail
+        val userExists = userService.findByEmail(user.email)
+
+
+        if (userExists.isPresent) {
+            modelAndView.addObject("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.")
+            modelAndView.viewName = "registration"
+            bindingResult.reject("email")
+        }
+
+        if (bindingResult.hasErrors()) {
+            modelAndView.viewName = "registration"
+        } else { // new user so we create user and send confirmation e-mail
+
+            // Disable user until they click on confirmation link in email
+            user.enabled = false
+
+            // Generate random 36-character string token for confirmation link
+            user.confirmationToken = UUID.randomUUID().toString()
+
+            userService.saveUser(user)
+
+            val appUrl = "${request.scheme}://${request.serverName}:${request.serverPort}"
+
+            val registrationEmail = SimpleMailMessage()
+            registrationEmail.setTo(user.email)
+            registrationEmail.setSubject("Registration Confirmation")
+            registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
+                    + appUrl + "/registration?token=" + user.confirmationToken)
+            registrationEmail.setFrom("noreply@domain.com")
+
+            emailService.sendEmail(registrationEmail)
+
+            modelAndView.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + user.email)
+            modelAndView.viewName = "registration"
+        }
+
+        return modelAndView
+
+    }
+
+    // Process confirmation link
+    @PostMapping(value = ["/confirmToken"])
+    fun confirmationForm(modelAndView: ModelAndView, bindingResult: BindingResult, @RequestParam requestParams: Map<*, *>, redir: RedirectAttributes): ModelAndView {
+
+        modelAndView.viewName = "registration"
+
+//        val passwordCheck = Zxcvbn()
+//
+//
+//
+//        val strength = passwordCheck.measure(requestParams["password"] as String?)
+//
+//        if (strength.getScore() < 3) {
+//            bindingResult.reject("password")
+//
+//            redir.addFlashAttribute("errorMessage", "Your password is too weak.  Choose a stronger one.")
+//
+//            modelAndView.viewName = "redirect:confirm?token=" + requestParams["token"]
+//            println(requestParams["token"])
+//            return modelAndView
+//        }
+//
+        // Find the user associated with the reset token
+        val user = userService.findByConfirmationToken(requestParams["token"] as String).get()
+//
+//        // Set new password
+//        user.password = bCryptPasswordEncoder.encode(requestParams["password"] as CharSequence?)
+
+        // Set user to enabled
+        user.enabled = true
+
+        // Save user
+        userService.saveUser(user)
+
+        modelAndView.addObject("successMessage", "Your password has been set!")
+        return modelAndView
+    }
+
+
+
+
+
+
+
+
     // Return registration form template
-    @RequestMapping(value = "/register", method = arrayOf(RequestMethod.GET))
+    @RequestMapping(value = ["/register"], method = arrayOf(RequestMethod.GET))
     fun showRegistrationPage(modelAndView: ModelAndView, user: User): ModelAndView {
         modelAndView.addObject("user", user)
         modelAndView.viewName = "register"
@@ -169,7 +266,7 @@ class RegisterController(
 
 
     // Process form input data
-    @RequestMapping(value = "/register", method = arrayOf(RequestMethod.POST))
+    @RequestMapping(value = ["/register"], method = arrayOf(RequestMethod.POST))
     fun processRegistrationForm(modelAndView: ModelAndView, @Valid user: User, bindingResult: BindingResult, request: HttpServletRequest): ModelAndView {
 
         // Lookup user in database by e-mail
@@ -199,7 +296,7 @@ class RegisterController(
             val appUrl = "${request.scheme}://${request.serverName}:${request.serverPort}"
 
             val registrationEmail = SimpleMailMessage()
-            registrationEmail.setTo(user.email!!)
+            registrationEmail.setTo(user.email)
             registrationEmail.setSubject("Registration Confirmation")
             registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
                     + appUrl + "/confirm?token=" + user.confirmationToken)
@@ -215,7 +312,7 @@ class RegisterController(
     }
 
     // Process confirmation link
-    @RequestMapping(value = "/confirm", method = arrayOf(RequestMethod.GET))
+    @RequestMapping(value = ["/confirm"], method = arrayOf(RequestMethod.GET))
     fun showConfirmationPage(modelAndView: ModelAndView, @RequestParam("token") token: String): ModelAndView {
 
         val user = userService.findByConfirmationToken(token)
@@ -231,7 +328,7 @@ class RegisterController(
     }
 
     // Process confirmation link
-    @RequestMapping(value = "/confirm", method = arrayOf(RequestMethod.POST))
+    @RequestMapping(value = ["/confirm"], method = arrayOf(RequestMethod.POST))
     fun processConfirmationForm(modelAndView: ModelAndView, bindingResult: BindingResult, @RequestParam requestParams: Map<*, *>, redir: RedirectAttributes): ModelAndView {
 
         modelAndView.viewName = "confirm"
@@ -257,7 +354,7 @@ class RegisterController(
         user.password = bCryptPasswordEncoder.encode(requestParams["password"] as CharSequence?)
 
         // Set user to enabled
-        user!!.enabled = true
+        user.enabled = true
 
         // Save user
         userService.saveUser(user)

@@ -17,9 +17,11 @@
     <link th:href="@{//webjars/smartwizard/dist/css/smart_wizard_theme_dots.css}" rel="stylesheet">
 </head>
 <body>
+
+
 <div class="container">
     <br/>
-    <form action="#" id="myForm" role="form" data-toggle="validator" method="post" accept-charset="utf-8">
+    <form action="#" id="myForm" role="form" data-toggle="validator" method="post" accept-charset="utf-8" th:action="@{/registration#step-6}" th:object="${user}">
 
         <!-- SmartWizard html -->
         <div id="smartwizard">
@@ -39,6 +41,9 @@
                 <li><a href="#step-5">Step 5<br/>
                     <small>Terms and Conditions</small>
                 </a></li>
+                <li><a href="#step-6">Step 6<br/>
+                    <small>Confirmation</small>
+                </a></li>
             </ul>
 
             <div>
@@ -47,30 +52,43 @@
                     <div id="form-step-0" role="form" data-toggle="validator">
                         <div class="form-group">
                             <label for="email">Email address:</label>
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Write your email address" required>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Write your email address" required
+                                   th:value="${user.email}">
+                            <div class="help-block"></div>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
+                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message alert alert-danger" role="alert"></div>
+
+
                 </div>
                 <div id="step-2">
                     <h2>Your First Name</h2>
                     <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
                             <label for="firstName">First Name:</label>
-                            <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Write your first name" required>
+                            <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Write your first name" required
+                                   th:value="${user.firstName}">
+                            <div class="help-block"></div>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
+                    <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="validation-message alert alert-danger" role="alert"></div>
+
                 </div>
                 <div id="step-3">
                     <h2>Your Last Name</h2>
                     <div id="form-step-2" role="form" data-toggle="validator">
                         <div class="form-group">
                             <label for="lastName">Last Name:</label>
-                            <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Write your last name" required>
+                            <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Write your last name" required
+                                   th:value="${user.lastName}">
+                            <div class="help-block"></div>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
+                    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="validation-message alert alert-danger" role="alert"></div>
+
                 </div>
 
                 <div id="step-4">
@@ -78,19 +96,24 @@
                     <div id="form-step-3" role="form" data-toggle="validator">
                         <div class="form-group">
                             <label for="inputPassword">Password</label>
-                            <input type="password" data-minlength="8" class="form-control" id="inputPassword" placeholder="Password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" required>
+
+                            <input type="password" data-minlength="8" class="form-control" id="inputPassword" placeholder="Password"
+                                   pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" required
+                                   th:value="${user.password}">
+
                             <div class="help-block">Minimum of 8 characters and at least one capital letter</div>
                             <div class="help-block with-errors"></div>
-                        </div>
 
-                        <div class="form-group">
+
                             <label for="inputPasswordConfirm">Confirm Password</label>
 
-                            <input type="password" class="form-control" id="inputPasswordConfirm" data-match="#inputPassword" data-match-error="Whoops, these don't match"
-                                   placeholder="Confirm" required>
+                            <input type="password" class="form-control" name="password" id="inputPasswordConfirm" data-match="#inputPassword"
+                                   data-match-error="Whoops, these don't match"
+                                   placeholder="Confirm" required
+                                   th:value="${user.password}">
 
                             <div class="help-block"></div>
-                             <div class="help-block with-errors"></div>
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
                 </div>
@@ -108,9 +131,60 @@
                         </div>
                     </div>
                 </div>
+
+                <div id="step-6">
+                    <h2>Confirmation</h2>
+                    <div id="form-step-5" role="form" data-toggle="validator">
+                        <div class="form-group">
+                            <div th:if="${confirmationMessage}" class="alert alert-success" role="alert" th:text=${confirmationMessage}></div>
+                            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+                        </div>
+                    </div>
+
+
+                    <form th:if="!${invalidToken}" class="m-t" id="confirmTokenForm" role="form" action="#" th:object="${setToken}"
+                          th:action="@{/confirmToken}" method="post">
+
+                        <span th:text="'User Token: ' + ${user.confirmationToken}"></span>
+
+                        <!--<input type="hidden" name="token" th:value=${confirmationToken}>-->
+
+                        <!--<div class="form-group input-group has-feedback">-->
+                <!--<span class="input-group-addon">-->
+                    <!--<span class="fa fa-lock" style="font-size:20px; padding: 10px"></span>-->
+                <!--</span>-->
+                            <!--<input name="password" type="password" id="password" placeholder="Password" class="form-control"-->
+                                   <!--required/>-->
+                            <!--<span class="fa form-control-feedback" aria-hidden="true" style="font-size:20px"></span>-->
+                        <!--</div>-->
+
+                        <!--<div class="form-group input-group has-feedback">-->
+                <!--<span class="input-group-addon">-->
+                    <!--<span class="fa fa-lock" style="font-size:20px; padding: 10px"></span>-->
+                <!--</span>-->
+                            <!--<input type="password" class="form-control" id="signup-password-confirm" placeholder="Confirm Password" name="ConfirmPassword" data-fv-notempty="true"-->
+                                   <!--data-fv-notempty-message="Please confirm password"-->
+                                   <!--data-fv-identical="true"-->
+                                   <!--data-fv-identical-field="password"-->
+                                   <!--data-fv-identical-message="Both passwords must be identical"/>-->
+                            <!--<div class="help-block with-errors"></div>-->
+                            <!--<span class="fa form-control-feedback" aria-hidden="true" style="font-size:20px"></span>-->
+                        <!--</div>-->
+
+
+                        <!--<button type="submit" class="btn btn-primary block full-width m-b">Save</button>-->
+
+                    </form>
+
+
+
+
+                </div>
+
             </div>
         </div>
     </form>
+
 
 </div>
 
