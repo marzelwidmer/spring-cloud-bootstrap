@@ -1,20 +1,24 @@
-$(document).ready(function(){
+$.getScript('js/zxcvbn/zxcvbn.js', function () {
+    //script is loaded and executed put your dependent JS here
+});
+
+$(document).ready(function () {
 
     // Toolbar extra buttons    onClick="if(this.className.indexOf('disabled') == -1){btnFinish(this);}"
     var btnFinish = $('<button id="btnFinish"> ></button>')
         .text('Finish')
         .addClass('btn btn-info disabled')
 
-        .on('click', function(){
-            if( !$(this).hasClass('disabled')){
+        .on('click', function () {
+            if (!$(this).hasClass('disabled')) {
                 var elmForm = $("#myForm");
-                if(elmForm){
+                if (elmForm) {
                     elmForm.validator('validate');
                     var elmErr = elmForm.find('.has-error');
-                    if(elmErr && elmErr.length > 0){
+                    if (elmErr && elmErr.length > 0) {
                         // alert('Oops we still have error in the form');
                         return false;
-                    }else{
+                    } else {
                         // alert('Great! we are ready to submit form');
                         elmForm.submit();
                         return false;
@@ -24,18 +28,17 @@ $(document).ready(function(){
         });
     var btnCancel = $('<button></button>').text('Cancel')
         .addClass('btn btn-danger')
-        .on('click', function(){
+        .on('click', function () {
             $('#smartwizard').smartWizard("reset");
             $('#myForm').find("input, textarea").val("");
         });
-
 
 
     // Smart Wizard
     $('#smartwizard').smartWizard({
         selected: 0,
         theme: 'dots',
-        transitionEffect:'fade',
+        transitionEffect: 'fade',
         toolbarSettings: {
             toolbarPosition: 'bottom',
             toolbarExtraButtons: [
@@ -50,29 +53,55 @@ $(document).ready(function(){
         }
     });
 
-    $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
+    $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
         var elmForm = $("#form-step-" + stepNumber);
         // stepDirection === 'forward' :- this condition allows to do the form validation
         // only on forward navigation, that makes easy navigation on backwards still do the validation when going next
-        if(stepDirection === 'forward' && elmForm){
+        if (stepDirection === 'forward' && elmForm) {
             elmForm.validator('validate');
             var elmErr = elmForm.children('.has-error');
-            if(elmErr && elmErr.length > 0){
+
+            if (elmErr && elmErr.length > 0) {
                 // Form validation failed
                 return false;
             }
+
+
+            // Password Validation
+            if (stepNumber == 3) {
+                if ($("#inputPassword")) { // check if there a inputPassword
+                    var password = $("#inputPassword").val();
+
+                    var result = zxcvbn(password),
+                        score = result.score,
+                        message = result.feedback.warning || 'The password is weak';
+
+                    // We will treat the password as an invalid one if the score is less than 3
+                    if (score < 3) {
+                        console.log(message)
+                        console.log(result)
+                        console.log(score)
+                        $('#passwordAlert').text(message);
+                        $('#passwordAlert').removeAttr( 'style' );
+                        // Form validation failed
+                        return false;
+                    }
+                    $('#passwordAlert').attr("style", "display:none");
+                }
+            }
+
+
         }
         return true;
     });
 
-    $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection) {
+    $("#smartwizard").on("showStep", function (e, anchorObject, stepNumber, stepDirection) {
         $('.btnFinish').addClass('disabled');
         // Enable finish button only on last step
-        if(stepNumber == 5){
+        if (stepNumber == 5) {
             $('#btnFinish').removeClass('disabled');
         }
     });
-
 });
 
 
@@ -80,9 +109,9 @@ var $checkBoxes = $(":checkbox").on("change", function () { // Here listening th
     // $checkBoxes.removeClass("change").attr("checked", false); // remove the class from existing Checkbox
     // $(this).addClass("change").attr("checked", true); // adding the class for the currenly checked checkbox
 
-    if($("#terms").is(":checked") == true){ // check if terms checkbox is activated for remive finish disabled class
+    if ($("#terms").is(":checked") == true) { // check if terms checkbox is activated for remive finish disabled class
         $('#btnFinish').removeClass('disabled');
-    }else {
+    } else {
         $('#btnFinish').addClass('disabled');
     }
 

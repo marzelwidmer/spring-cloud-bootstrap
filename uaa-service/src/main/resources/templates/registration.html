@@ -93,10 +93,15 @@
 
                 <div id="step-4">
                     <h2>Your Password</h2>
+
+                    <div id="passwordAlert" class="alert alert-danger" role="alert" style="display:none"></div>
+
+
+
                     <div id="form-step-3" role="form" data-toggle="validator">
                         <div class="form-group">
-                            <label for="inputPassword">Password</label>
 
+                            <label for="inputPassword">Password</label>
                             <input type="password" data-minlength="8" class="form-control" id="inputPassword" placeholder="Password"
                                    pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" required
                                    th:value="${user.password}">
@@ -137,6 +142,7 @@
                     <div id="form-step-5" role="form" data-toggle="validator">
                         <div class="form-group">
                             <div th:if="${confirmationMessage}" class="alert alert-success" role="alert" th:text=${confirmationMessage}></div>
+                            <div th:if="${alreadyRegisteredMessage}" class="alert alert-danger" role="alert" th:text=${alreadyRegisteredMessage}></div>
                             <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
                         </div>
                     </div>
@@ -202,6 +208,7 @@
 <!-- Include SmartWizard JavaScript source -->
 <!--<script th:src="@{/webjars/smartwizard/dist/js/jquery.smartWizard.min.js}" />-->
 <script type="text/javascript" src="js/smartWizard/jquery.smartWizard.min.js"></script>
+
 <script type="text/javascript" src="js/registration.js"></script>
 
 
