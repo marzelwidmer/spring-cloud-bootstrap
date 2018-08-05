@@ -157,10 +157,10 @@ class RegisterController(
         private val emailService: EmailService
 ) {
 
+
+
     @GetMapping(value = ["/registration"])
     fun registrationPage(modelAndView: ModelAndView, user: User): ModelAndView {
-//        modelAndView.addObject("user", User(firstName = "John", lastName = "Doe", password = "12345678A", email = "marzelwidmer@gmail.com", confirmationToken = "123"))
-
         modelAndView.addObject("user", user)
         modelAndView.viewName = "registration"
         return modelAndView
@@ -168,7 +168,7 @@ class RegisterController(
 
     //    // Process form input data
     @PostMapping(value = ["/registration"])
-    fun registrationForm(modelAndView: ModelAndView,  user: User, bindingResult: BindingResult, request: HttpServletRequest): ModelAndView {
+    fun registrationForm(modelAndView: ModelAndView,  @Valid  user: User, bindingResult: BindingResult, request: HttpServletRequest): ModelAndView {
 
         // Lookup user in database by e-mail
         val userExists = userService.findByEmail(user.email)
@@ -248,6 +248,19 @@ class RegisterController(
         modelAndView.addObject("successMessage", "Your password has been set!")
         return modelAndView
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
