@@ -27,38 +27,91 @@
         <div id="smartwizard">
             <ul>
                 <li><a href="#step-1">Step 1<br/>
-                    <small>Email Address</small>
+                    <small>New Account</small>
                 </a></li>
                 <li><a href="#step-2">Step 2<br/>
-                    <small>First Name</small>
-                </a></li>
-                <li><a href="#step-3">Step 3<br/>
-                    <small>Last Name</small>
-                </a></li>
-                <li><a href="#step-4">Step 4<br/>
                     <small>Password</small>
                 </a></li>
-                <li><a href="#step-5">Step 5<br/>
+                <li><a href="#step-3">Step 3<br/>
                     <small>Terms and Conditions</small>
                 </a></li>
-                <li><a href="#step-6">Step 6<br/>
+                <li><a href="#step-4">Step 4<br/>
                     <small>Confirmation</small>
                 </a></li>
             </ul>
 
             <div>
+                <!-- NEW ACCOUNT -->
                 <div id="step-1">
-                    <h2>Your Email Address</h2>
+                    <h2>New Account</h2>
+                    <div class="help-block"></div>
                     <div id="form-step-0" role="form" data-toggle="validator">
+                        <div class="form-group has-error has-feedback">
+                            <label for="firstName">First Name:</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="Enter first name" required>
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        </div>
+                        <div class="form-group has-error has-feedback">
+                            <label for="lastName">Last Name:</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="Enter last name" required>
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        </div>
+                        <div class="form-group has-error has-feedback">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <hr/>
+                    </div>
+                </div>
+
+
+
+
+                <!-- PASSWORD -->
+                <div id="step-2">
+                    <h2>Your Password</h2>
+                    <div class="help-block">
+                        <div id="passwordAlert" class="alert alert-info" role="alert">Minimum of 8 characters</div>
+                    </div>
+
+                    <div id="form-step-1" role="form" data-toggle="validator">
+
+                        <div class="form-group has-error has-feedback">
+                            <label for="inputPassword">Password:</label>
+                            <input type="password" data-minlength="8" class="form-control" id="inputPassword" placeholder="Enter password" required>
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        </div>
+                        <div class="form-group has-error has-feedback">
+                            <label for="inputPasswordConfirm">Confirm Password:</label>
+                            <input type="password" data-minlength="8" data-match="#inputPassword" class="form-control" id="inputPasswordConfirm" placeholder="Confirm password" required>
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <hr/>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div id="step-3">
+                    <h2>Terms and Conditions</h2>
+                    <p>
+                        Terms and conditions: Keep your smile :)
+                    </p>
+                    <div id="form-step-2" role="form" data-toggle="validator">
                         <div class="form-group">
-                            <label for="email">Email address:</label>
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Write your email address" required
-                                   th:value="${user.email}">
-                            <div class="help-block"></div>
+                            <label for="terms">I agree with the T&C</label>
+                            <input type="checkbox" id="terms" data-error="Please accept the Terms and Conditions" required>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
-                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message alert alert-danger" role="alert"></div>
 
                     <div>
                         <hr/>
@@ -67,7 +120,40 @@
 
 
 
-                <div id="step-2">
+
+
+                <div id="step-4">
+                    <h2>Confirmation</h2>
+                    <div id="form-step-5" role="form" data-toggle="validator">
+                        <div class="form-group">
+                            <div th:if="${confirmationMessage}" class="alert alert-success" role="alert" th:text=${confirmationMessage}></div>
+                            <div th:if="${alreadyRegisteredMessage}" class="alert alert-danger" role="alert" th:text=${alreadyRegisteredMessage}></div>
+                            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+                        </div>
+                    </div>
+
+
+                    <form th:if="!${invalidToken}" class="m-t" id="confirmTokenForm" role="form" action="#" th:object="${setToken}"
+                          th:action="@{/confirmToken}" method="post">
+
+                        <p th:text="'Token: ' + ${user.confirmationToken}"></p>
+                        <p th:text="'First Name: ' + ${user.firstName}"></p>
+                        <p th:text="'Last Name: ' + ${user.lastName}"></p>
+                        <p th:text="'email: ' + ${user.email}"></p>
+
+
+                        <button type="submit" class="btn btn-primary block full-width m-b">Register</button>
+
+                    </form>
+
+                    <div>
+                        <hr/>
+                    </div>
+
+
+                </div>
+
+            <!--    <div id="step-2">
                     <h2>Your First Name</h2>
                     <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group">
@@ -84,12 +170,9 @@
                         <hr/>
                     </div>
                 </div>
+-->
 
-
-
-
-
-                <div id="step-3">
+              <!--  <div id="step-3">
                     <h2>Your Last Name</h2>
                     <div id="form-step-2" role="form" data-toggle="validator">
                         <div class="form-group">
@@ -106,13 +189,6 @@
                         <hr/>
                     </div>
                 </div>
-
-
-
-
-
-
-
 
 
                 <div id="step-4">
@@ -144,12 +220,6 @@
                 </div>
 
 
-
-
-
-
-
-
                 <div id="step-5">
                     <h2>Terms and Conditions</h2>
                     <p>
@@ -167,8 +237,6 @@
                         <hr/>
                     </div>
                 </div>
-
-
 
 
                 <div id="step-6">
@@ -201,7 +269,7 @@
 
 
                 </div>
-
+-->
             </div>
         </div>
     </form>

@@ -55,6 +55,7 @@ $(document).ready(function () {
         // stepDirection === 'forward' :- this condition allows to do the form validation
         // only on forward navigation, that makes easy navigation on backwards still do the validation when going next
         if (stepDirection === 'forward' && elmForm) {
+
             elmForm.validator('validate');
             var elmErr = elmForm.children('.has-error');
 
@@ -64,7 +65,7 @@ $(document).ready(function () {
             }
 
             // Password Validation on step 3 check again the password
-            if (stepNumber == 3) {
+            if (stepNumber == 1) {
                 var score = $('.foo').checkPasswordScore();
                 if(score < 3){
                     return false;
@@ -84,6 +85,8 @@ $(document).ready(function () {
         }
     });
 });
+
+
 
 $.fn.checkPasswordScore = function () {
     if ($("#inputPassword")) { // check if there a inputPassword
@@ -112,6 +115,8 @@ $.fn.checkPasswordScore = function () {
 $("#inputPassword").keyup(function () {
     $('.foo').checkPasswordScore()
 });
+
+
 
 
 $(":checkbox").on("change", function () { // Here listening the changes on checkbox using on()

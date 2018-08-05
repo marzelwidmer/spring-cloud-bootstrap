@@ -159,9 +159,9 @@ class RegisterController(
 
     @GetMapping(value = ["/registration"])
     fun registrationPage(modelAndView: ModelAndView, user: User): ModelAndView {
-        modelAndView.addObject("user", User(firstName = "John", lastName = "Doe", password = "12345678A", email = "marzelwidmer@gmail.com", confirmationToken = "123"))
+//        modelAndView.addObject("user", User(firstName = "John", lastName = "Doe", password = "12345678A", email = "marzelwidmer@gmail.com", confirmationToken = "123"))
 
-//        modelAndView.addObject("user", user)
+        modelAndView.addObject("user", user)
         modelAndView.viewName = "registration"
         return modelAndView
     }
