@@ -1,40 +1,10 @@
 $.getScript('js/zxcvbn/zxcvbn.js', function () {
-    //script is loaded and executed put your dependent JS here
+    //password strength estimation script is loaded
 });
 
 $(document).ready(function () {
 
-    // Toolbar extra buttons    onClick="if(this.className.indexOf('disabled') == -1){btnFinish(this);}"
-    var btnFinish = $('<button id="btnFinish"> ></button>')
-        .text('Finish')
-        .addClass('btn btn-info disabled')
-
-        .on('click', function () {
-            if (!$(this).hasClass('disabled')) {
-                var elmForm = $("#myForm");
-                if (elmForm) {
-                    elmForm.validator('validate');
-                    var elmErr = elmForm.find('.has-error');
-                    if (elmErr && elmErr.length > 0) {
-                        // alert('Oops we still have error in the form');
-                        return false;
-                    } else {
-                        // alert('Great! we are ready to submit form');
-                        elmForm.submit();
-                        return false;
-                    }
-                }
-            }
-        });
-    var btnCancel = $('<button></button>').text('Cancel')
-        .addClass('btn btn-danger')
-        .on('click', function () {
-            $('#smartwizard').smartWizard("reset");
-            $('#myForm').find("input, textarea").val("");
-        });
-
-
-    // Smart Wizard
+    // Smart Wizard Configuration
     $('#smartwizard').smartWizard({
         selected: 0,
         theme: 'dots',
@@ -42,8 +12,33 @@ $(document).ready(function () {
         toolbarSettings: {
             toolbarPosition: 'bottom',
             toolbarExtraButtons: [
-                btnFinish,
-                btnCancel]
+                // $('<button id="btnFinish" onClick="if(this.className.indexOf(\\\'disabled\\\') == -1){btnFinish(this);}"></button>')
+                //     .text('Finish')
+                //     .addClass('btn btn-info disabled')
+                //     .on('click', function(){
+                //         if (!$(this).hasClass('disabled')) {
+                //             var elmForm = $("#myForm");
+                //             if (elmForm) {
+                //                 elmForm.validator('validate');
+                //                 var elmErr = elmForm.find('.has-error');
+                //                 if (elmErr && elmErr.length > 0) {
+                //                     // alert('Oops we still have error in the form');
+                //                     return false;
+                //                 } else {
+                //                     // alert('Great! we are ready to submit form');
+                //                     elmForm.submit();
+                //                     return false;
+                //                 }
+                //             }
+                //         }
+                //     }),
+                $('<button></button>').text('Reset')
+                    .addClass('btn btn-danger')
+                    .on('click', function(){
+                        $('#smartwizard').smartWizard("reset");
+                        $('#myForm').find("input, textarea").val("");
+                    })
+            ]
         },
         anchorSettings: {
             markDoneStep: true, // add done css
@@ -53,6 +48,8 @@ $(document).ready(function () {
         }
     });
 
+
+    // Leave Step Validation
     $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
         var elmForm = $("#form-step-" + stepNumber);
         // stepDirection === 'forward' :- this condition allows to do the form validation
@@ -66,7 +63,7 @@ $(document).ready(function () {
                 return false;
             }
 
-            // Password Validation on step 3
+            // Password Validation on step 3 check again the password
             if (stepNumber == 3) {
                 var score = $('.foo').checkPasswordScore();
                 if(score < 3){
@@ -78,6 +75,7 @@ $(document).ready(function () {
         return true;
     });
 
+    // Show Step
     $("#smartwizard").on("showStep", function (e, anchorObject, stepNumber, stepDirection) {
         $('.btnFinish').addClass('disabled');
         // Enable finish button only on last step
@@ -116,10 +114,8 @@ $("#inputPassword").keyup(function () {
 });
 
 
-var $checkBoxes = $(":checkbox").on("change", function () { // Here listening the changes on checkbox using on()
-    // $checkBoxes.removeClass("change").attr("checked", false); // remove the class from existing Checkbox
-    // $(this).addClass("change").attr("checked", true); // adding the class for the currenly checked checkbox
-
+$(":checkbox").on("change", function () { // Here listening the changes on checkbox using on()
+    // terms checkbox
     if ($("#terms").is(":checked") == true) { // check if terms checkbox is activated for remive finish disabled class
         $('#btnFinish').removeClass('disabled');
     } else {

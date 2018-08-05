@@ -60,8 +60,13 @@
                     </div>
                     <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message alert alert-danger" role="alert"></div>
 
-
+                    <div>
+                        <hr/>
+                    </div>
                 </div>
+
+
+
                 <div id="step-2">
                     <h2>Your First Name</h2>
                     <div id="form-step-1" role="form" data-toggle="validator">
@@ -75,7 +80,15 @@
                     </div>
                     <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="validation-message alert alert-danger" role="alert"></div>
 
+                    <div>
+                        <hr/>
+                    </div>
                 </div>
+
+
+
+
+
                 <div id="step-3">
                     <h2>Your Last Name</h2>
                     <div id="form-step-2" role="form" data-toggle="validator">
@@ -89,6 +102,9 @@
                     </div>
                     <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="validation-message alert alert-danger" role="alert"></div>
 
+                    <div>
+                        <hr/>
+                    </div>
                 </div>
 
 
@@ -104,9 +120,6 @@
 
                     <div class="help-block">
                         <div id="passwordAlert" class="alert alert-info" role="alert">Minimum of 8 characters</div>
-                        <!--<div  class="alert alert-success" role="alert">-->
-                            <!--Minimum of 8 characters and at least one capital letter-->
-                        <!--</div>-->
                     </div>
 
                     <div id="form-step-3" role="form" data-toggle="validator">
@@ -123,6 +136,10 @@
                             <div class="help-block with-errors"></div>
 
                         </div>
+                    </div>
+
+                    <div>
+                        <hr/>
                     </div>
                 </div>
 
@@ -145,7 +162,14 @@
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
+
+                    <div>
+                        <hr/>
+                    </div>
                 </div>
+
+
+
 
                 <div id="step-6">
                     <h2>Confirmation</h2>
@@ -161,38 +185,19 @@
                     <form th:if="!${invalidToken}" class="m-t" id="confirmTokenForm" role="form" action="#" th:object="${setToken}"
                           th:action="@{/confirmToken}" method="post">
 
-                        <span th:text="'User Token: ' + ${user.confirmationToken}"></span>
-
-                        <!--<input type="hidden" name="token" th:value=${confirmationToken}>-->
-
-                        <!--<div class="form-group input-group has-feedback">-->
-                <!--<span class="input-group-addon">-->
-                    <!--<span class="fa fa-lock" style="font-size:20px; padding: 10px"></span>-->
-                <!--</span>-->
-                            <!--<input name="password" type="password" id="password" placeholder="Password" class="form-control"-->
-                                   <!--required/>-->
-                            <!--<span class="fa form-control-feedback" aria-hidden="true" style="font-size:20px"></span>-->
-                        <!--</div>-->
-
-                        <!--<div class="form-group input-group has-feedback">-->
-                <!--<span class="input-group-addon">-->
-                    <!--<span class="fa fa-lock" style="font-size:20px; padding: 10px"></span>-->
-                <!--</span>-->
-                            <!--<input type="password" class="form-control" id="signup-password-confirm" placeholder="Confirm Password" name="ConfirmPassword" data-fv-notempty="true"-->
-                                   <!--data-fv-notempty-message="Please confirm password"-->
-                                   <!--data-fv-identical="true"-->
-                                   <!--data-fv-identical-field="password"-->
-                                   <!--data-fv-identical-message="Both passwords must be identical"/>-->
-                            <!--<div class="help-block with-errors"></div>-->
-                            <!--<span class="fa form-control-feedback" aria-hidden="true" style="font-size:20px"></span>-->
-                        <!--</div>-->
+                        <p th:text="'Token: ' + ${user.confirmationToken}"></p>
+                        <p th:text="'First Name: ' + ${user.firstName}"></p>
+                        <p th:text="'Last Name: ' + ${user.lastName}"></p>
+                        <p th:text="'email: ' + ${user.email}"></p>
 
 
-                        <!--<button type="submit" class="btn btn-primary block full-width m-b">Save</button>-->
+                        <button type="submit" class="btn btn-primary block full-width m-b">Register</button>
 
                     </form>
 
-
+                    <div>
+                        <hr/>
+                    </div>
 
 
                 </div>
