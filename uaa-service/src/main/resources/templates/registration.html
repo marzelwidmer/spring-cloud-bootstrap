@@ -23,8 +23,7 @@
     <br/>
 
 
-
-    <form action="#" id="myForm" role="form" data-toggle="validator" method="post" accept-charset="utf-8" th:action="@{/registration#step-3}" th:object="${user}">
+    <form action="#" id="myForm" role="form" data-toggle="validator" method="post" accept-charset="utf-8" th:action="@{/registration#step-4}" th:object="${user}">
 
         <!-- SmartWizard html -->
         <div id="smartwizard">
@@ -32,6 +31,7 @@
                 <li><a href="#step-1">Step 1<br/><small>New Account</small></a></li>
                 <li><a href="#step-2">Step 2<br/><small>Password</small></a></li>
                 <li><a href="#step-3">Step 3<br/><small>Terms and Conditions</small></a></li>
+                <li><a href="#step-4">Step 4<br/><small>Finish Registration</small></a></li>
             </ul>
 
             <div>
@@ -42,23 +42,21 @@
                     <div id="form-step-0" role="form" data-toggle="validator">
                         <div class="form-group has-error has-feedback">
                             <label for="firstName">First Name:</label>
-                            <input type="text" class="form-control" id="firstName" placeholder="Enter first name" th:field="*{firstName}"  th:value="${user.firstName}" required>
+                            <input type="text" class="form-control" id="firstName" placeholder="Enter first name" th:field="*{firstName}" th:value="${user.firstName}" required>
                             <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         </div>
                         <div class="form-group has-error has-feedback">
                             <label for="lastName">Last Name:</label>
-                            <input type="text" class="form-control" id="lastName" placeholder="Enter last name"  th:field="*{lastName}" required>
+                            <input type="text" class="form-control" id="lastName" placeholder="Enter last name" th:field="*{lastName}" required>
                             <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         </div>
                         <div class="form-group has-error has-feedback">
                             <label for="email">Email:</label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter email" th:field="*{email}"  required>
+                            <input type="email" class="form-control" id="email" placeholder="Enter email" th:field="*{email}" required>
                             <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         </div>
                     </div>
                 </div>
-
-
 
 
                 <!-- PASSWORD -->
@@ -70,38 +68,91 @@
                     <div id="form-step-1" role="form" data-toggle="validator">
                         <div class="form-group has-error has-feedback">
                             <label for="inputPassword">Password:</label>
-                            <input type="password" data-minlength="8" class="form-control" id="inputPassword" placeholder="Enter password" th:field="*{password}"required>
+                            <input type="password" data-minlength="8" class="form-control" id="inputPassword" placeholder="Enter password" th:field="*{password}" required>
                             <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         </div>
                         <div class="form-group has-error has-feedback">
                             <label for="inputPasswordConfirm">Confirm Password:</label>
-                            <input type="password" data-minlength="8" data-match="#inputPassword" class="form-control" id="inputPasswordConfirm" placeholder="Confirm password" required>
+                            <input type="password" data-minlength="8" data-match="#inputPassword" class="form-control" id="inputPasswordConfirm" placeholder="Confirm password"
+                                   required>
                             <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                         </div>
                     </div>
                 </div>
 
 
-
-
-
                 <!-- Terms and Conditions -->
                 <div id="step-3">
                     <h2>Terms and Conditions</h2>
                     <p>
-                        Terms and conditions: Keep your smile :)
+                        When making the template, you should know what should be included in it or what it should cover.
+                        This is so you don’t miss out on anything important which can be the cause of problems in the long run. So, when you’re making terms and conditions, make
+                        sure it covers the following:
+                    </p>
+                    <ul>
+                        <li> Acceptable use of your website and all of its content.</li>
+                        <li> Forbidden use of your website and all of its content.</li>
+                        <li> Rules on using or downloading any or all the content in your website.</li>
+                        <li> Rules on uploading any content in your website.</li>
+                        <li> Registration procedures, password tips and other security information.</li>
+                        <li> Any and all websites which are linked to your own.</li>
+                        <li> The availability of your website.</li>
+                        <li> Disclaimers and the limitation of liability statement to protect you as the owner of the website.</li>
+                        <li> Basically your terms and conditions should contain information about how the users and customers can use your website properly.
+                            You need this section in order to protect yourself as the owner and prevent any legal issues.
+                        </li>
+                    </ul>
+                    <h2>The Important Elements of Website Terms and Conditions</h2>
+                    <p>
+                        When making this page for your website, you may include any information you’d like and make it as short or as long as you prefer. However, you have to keep
+                        in mind that there are certain elements which your template must contain. These basic elements would help ensure that your terms and conditions on the
+                        website are complete and you’ve covered everything that is essential.
+                    </p>
+                    <h2>Limits of Liability</h2>
+                    <p>
+                        It is very important for you to include a disclaimer which would eliminate any liability if mistakes are discovered in the contents of your website. If your
+                        website allows other people to post content, you should have limits of liability to protect you in the case that someone posts something illegal or
+                        offensive and you aren’t able to take it down immediately.
+                    </p>
+                    <h2>Copyright</h2>
+                    <p>
+                        No matter what your website contains, you must include a notification or a statement about copyright so you are sure your content won’t be replicated.
+                    </p>
+                    <h2>Privacy Policy</h2>
+                    <p>
+                        For websites which collect sensitive information from users or customers, you have to include a privacy policy. This is to be sure that they are protected
+                        since you won’t be using their information anywhere else.
+                    </p>
+                    <h2>Governing Law</h2>
+                    <p>
+                        It’s very important to inform users and customers of the set Governing Laws to which all your rules apply.
                     </p>
                     <div id="form-step-2" role="form" data-toggle="validator">
                         <div class="form-group">
-                            <label for="terms">I agree with the T&C</label>
+                            <label for="terms">I agree to the terms of service</label>
                             <input type="checkbox" id="terms" data-error="Please accept the Terms and Conditions" required>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div th:if="${confirmationMessage}" class="alert alert-success" role="alert" th:text=${confirmationMessage}></div>
-                        <div th:if="${alreadyRegisteredMessage}" class="alert alert-danger" role="alert" th:text=${alreadyRegisteredMessage}></div>
-                        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
+                </div>
+
+
+
+                <!-- Verify Your Account -->
+                <div id="step-4">
+
+                    <h2>Finish Registation</h2>
+
+                    <div id="form-step-3" role="form" data-toggle="validator">
+                        <p>
+                            Please press the Register button to submit your registration.
+                        </p>
+                        <div class="form-group">
+                            <div th:if="${confirmationMessage}" class="alert alert-success" role="alert" th:text=${confirmationMessage}></div>
+                            <div th:if="${alreadyRegisteredMessage}" class="alert alert-danger" role="alert" th:text=${alreadyRegisteredMessage}></div>
+                            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+                        </div>
                     </div>
                 </div>
             </div>

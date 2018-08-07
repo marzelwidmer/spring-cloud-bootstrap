@@ -12,6 +12,7 @@ $(document).ready(function () {
         cycleSteps: false, // Allows to cycle the navigation of steps
         backButtonSupport: true, // Enable the back button support
         useURLhash: true, // Enable selection of the step based on url hash
+        enableAllSteps: false, // Enable/Disable all steps on first load
         lang: {  // Language variables
             next: 'Next',
             previous: 'Previous'
@@ -22,7 +23,7 @@ $(document).ready(function () {
             showNextButton: true, // show/hide a Next button
             showPreviousButton: true, // show/hide a Previous button
             toolbarExtraButtons: [
-                $('<button type="submit"></button>').text('Finish')
+                $('<button type="submit"></button>').text('Registration')
                     .addClass('btn btn-info')
                     .on('click', function () {
                         if (!$(this).hasClass('disabled')) {
