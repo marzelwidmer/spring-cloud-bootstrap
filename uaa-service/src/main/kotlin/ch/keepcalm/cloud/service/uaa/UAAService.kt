@@ -196,9 +196,9 @@ class RegisterController(
 
             val registrationEmail = SimpleMailMessage()
             registrationEmail.setTo(user.email)
-            registrationEmail.setSubject("Registration Confirmation")
+            registrationEmail.setSubject("Verify Your Account")
             registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
-                    + appUrl + "/registration?token=" + user.confirmationToken)
+                    + appUrl + "/registration#step-5?token=" + user.confirmationToken)
             registrationEmail.setFrom("noreply@domain.com")
 
             emailService.sendEmail(registrationEmail)
@@ -210,6 +210,12 @@ class RegisterController(
         return modelAndView
 
     }
+
+
+
+
+
+
 
     // Process confirmation link
     @PostMapping(value = ["/confirmToken"])
