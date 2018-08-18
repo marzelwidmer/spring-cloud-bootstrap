@@ -158,7 +158,6 @@ class RegisterController(
 ) {
 
 
-
     @GetMapping(value = ["/registration"])
     fun registrationPage(modelAndView: ModelAndView, user: User): ModelAndView {
         modelAndView.addObject("user", user)
@@ -168,7 +167,7 @@ class RegisterController(
 
     //    // Process form input data
     @PostMapping(value = ["/registration"])
-    fun registrationForm(modelAndView: ModelAndView,  @Valid  user: User, bindingResult: BindingResult, request: HttpServletRequest): ModelAndView {
+    fun registrationForm(modelAndView: ModelAndView, @Valid user: User, bindingResult: BindingResult, request: HttpServletRequest): ModelAndView {
 
         // Lookup user in database by e-mail
         val userExists = userService.findByEmail(user.email)
@@ -198,7 +197,7 @@ class RegisterController(
             registrationEmail.setTo(user.email)
             registrationEmail.setSubject("Verify Your Account")
             registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
-                    + appUrl + "/registration#step-5?token=" + user.confirmationToken)
+                    + appUrl + "/confirmRegistration?token=" + user.confirmationToken)
             registrationEmail.setFrom("noreply@domain.com")
 
             emailService.sendEmail(registrationEmail)
@@ -212,20 +211,134 @@ class RegisterController(
     }
 
 
+    @GetMapping("/confirmRegistration")
+    fun showConfirmationPage(@RequestParam(value = "token") token: String, modelAndView: ModelAndView, user: User): ModelAndView {
+
+
+        modelAndView.viewName = "confirmRegistration"
+        // Find the user associated with the reset token
+        val user = userService.findByConfirmationToken(token)
+
+        if (user.isPresent) { // Token found
+            modelAndView.addObject("confirmationToken", user.get().confirmationToken)
+            modelAndView.addObject("user", user.get())
+
+            // Set user to enabled
+            user.get().enabled = true
+
+            // Save user
+            userService.saveUser(user.get())
+
+        } else {// No token found in DB
+            modelAndView.addObject("invalidToken", "Oops!  This is an invalid confirmation link.")
+        }
+
+        return modelAndView
+
+    }
 
 
 
 
+//
+//    // Process confirmation link
+//    @PostMapping(value = ["/confirmToken"])
+//    fun confirmationForm(modelAndView: ModelAndView, bindingResult: BindingResult, @RequestParam requestParams: Map<*, *>, redir: RedirectAttributes): ModelAndView {
+//
+//        modelAndView.viewName = "registration"
+//
+//        // Find the user associated with the reset token
+//        val user = userService.findByConfirmationToken(requestParams["token"] as String).get()
+//
+//        // Set user to enabled
+//        user.enabled = true
+//
+//        // Save user
+//        userService.saveUser(user)
+//
+//        modelAndView.addObject("successMessage", "Your password has been set!")
+//        return modelAndView
+//    }
+//
+//
+//    // Return registration form template
+//    @RequestMapping(value = ["/register"], method = arrayOf(RequestMethod.GET))
+//    fun showRegistrationPage(modelAndView: ModelAndView, user: User): ModelAndView {
+//        modelAndView.addObject("user", user)
+//        modelAndView.viewName = "register"
+//        return modelAndView
+//    }
+//
+//
+//    // Process form input data
+//    @RequestMapping(value = ["/register"], method = arrayOf(RequestMethod.POST))
+//    fun processRegistrationForm(modelAndView: ModelAndView, @Valid user: User, bindingResult: BindingResult, request: HttpServletRequest): ModelAndView {
+//
+//        // Lookup user in database by e-mail
+//        val userExists = userService.findByEmail(user.email)
+//
+//        System.out.println(userExists)
+//
+//
+//        if (userExists.isPresent) {
+//            modelAndView.addObject("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.")
+//            modelAndView.viewName = "register"
+//            bindingResult.reject("email")
+//        }
+//
+//        if (bindingResult.hasErrors()) {
+//            modelAndView.viewName = "register"
+//        } else { // new user so we create user and send confirmation e-mail
+//
+//            // Disable user until they click on confirmation link in email
+//            user.enabled = false
+//
+//            // Generate random 36-character string token for confirmation link
+//            user.confirmationToken = UUID.randomUUID().toString()
+//
+//            userService.saveUser(user)
+//
+//            val appUrl = "${request.scheme}://${request.serverName}:${request.serverPort}"
+//
+//            val registrationEmail = SimpleMailMessage()
+//            registrationEmail.setTo(user.email)
+//            registrationEmail.setSubject("Registration Confirmation")
+//            registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
+//                    + appUrl + "/confirm?token=" + user.confirmationToken)
+//            registrationEmail.setFrom("noreply@domain.com")
+//
+//            emailService.sendEmail(registrationEmail)
+//
+//            modelAndView.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + user.email)
+//            modelAndView.viewName = "register"
+//        }
+//
+//        return modelAndView
+//    }
 
     // Process confirmation link
-    @PostMapping(value = ["/confirmToken"])
-    fun confirmationForm(modelAndView: ModelAndView, bindingResult: BindingResult, @RequestParam requestParams: Map<*, *>, redir: RedirectAttributes): ModelAndView {
+//    @RequestMapping(value = ["/confirm"], method = arrayOf(RequestMethod.GET))
+//    fun showConfirmationPage(modelAndView: ModelAndView, @RequestParam("token") token: String): ModelAndView {
+//
+//        val user = userService.findByConfirmationToken(token)
+//
+//        if (user.isPresent) { // Token found
+//            modelAndView.addObject("confirmationToken", user.get().confirmationToken)
+//        } else {// No token found in DB
+//            modelAndView.addObject("invalidToken", "Oops!  This is an invalid confirmation link.")
+//        }
+//
+//        modelAndView.viewName = "confirm"
+//        return modelAndView
+//    }
 
-        modelAndView.viewName = "registration"
-
+    // Process confirmation link
+//    @RequestMapping(value = ["/confirm"], method = arrayOf(RequestMethod.POST))
+//    fun processConfirmationForm(modelAndView: ModelAndView, bindingResult: BindingResult, @RequestParam requestParams: Map<*, *>, redir: RedirectAttributes): ModelAndView {
+//
+//        modelAndView.viewName = "confirm"
+//
 //        val passwordCheck = Zxcvbn()
-//
-//
 //
 //        val strength = passwordCheck.measure(requestParams["password"] as String?)
 //
@@ -239,148 +352,22 @@ class RegisterController(
 //            return modelAndView
 //        }
 //
-        // Find the user associated with the reset token
-        val user = userService.findByConfirmationToken(requestParams["token"] as String).get()
+//        // Find the user associated with the reset token
+//        val user = userService.findByConfirmationToken(requestParams["token"] as String).get()
 //
 //        // Set new password
 //        user.password = bCryptPasswordEncoder.encode(requestParams["password"] as CharSequence?)
-
-        // Set user to enabled
-        user.enabled = true
-
-        // Save user
-        userService.saveUser(user)
-
-        modelAndView.addObject("successMessage", "Your password has been set!")
-        return modelAndView
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // Return registration form template
-    @RequestMapping(value = ["/register"], method = arrayOf(RequestMethod.GET))
-    fun showRegistrationPage(modelAndView: ModelAndView, user: User): ModelAndView {
-        modelAndView.addObject("user", user)
-        modelAndView.viewName = "register"
-        return modelAndView
-    }
-
-
-    // Process form input data
-    @RequestMapping(value = ["/register"], method = arrayOf(RequestMethod.POST))
-    fun processRegistrationForm(modelAndView: ModelAndView, @Valid user: User, bindingResult: BindingResult, request: HttpServletRequest): ModelAndView {
-
-        // Lookup user in database by e-mail
-        val userExists = userService.findByEmail(user.email)
-
-        System.out.println(userExists)
-
-
-        if (userExists.isPresent) {
-            modelAndView.addObject("alreadyRegisteredMessage", "Oops!  There is already a user registered with the email provided.")
-            modelAndView.viewName = "register"
-            bindingResult.reject("email")
-        }
-
-        if (bindingResult.hasErrors()) {
-            modelAndView.viewName = "register"
-        } else { // new user so we create user and send confirmation e-mail
-
-            // Disable user until they click on confirmation link in email
-            user.enabled = false
-
-            // Generate random 36-character string token for confirmation link
-            user.confirmationToken = UUID.randomUUID().toString()
-
-            userService.saveUser(user)
-
-            val appUrl = "${request.scheme}://${request.serverName}:${request.serverPort}"
-
-            val registrationEmail = SimpleMailMessage()
-            registrationEmail.setTo(user.email)
-            registrationEmail.setSubject("Registration Confirmation")
-            registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
-                    + appUrl + "/confirm?token=" + user.confirmationToken)
-            registrationEmail.setFrom("noreply@domain.com")
-
-            emailService.sendEmail(registrationEmail)
-
-            modelAndView.addObject("confirmationMessage", "A confirmation e-mail has been sent to " + user.email)
-            modelAndView.viewName = "register"
-        }
-
-        return modelAndView
-    }
-
-    // Process confirmation link
-    @RequestMapping(value = ["/confirm"], method = arrayOf(RequestMethod.GET))
-    fun showConfirmationPage(modelAndView: ModelAndView, @RequestParam("token") token: String): ModelAndView {
-
-        val user = userService.findByConfirmationToken(token)
-
-        if (user.isPresent) { // Token found
-            modelAndView.addObject("confirmationToken", user.get().confirmationToken)
-        } else {// No token found in DB
-            modelAndView.addObject("invalidToken", "Oops!  This is an invalid confirmation link.")
-        }
-
-        modelAndView.viewName = "confirm"
-        return modelAndView
-    }
-
-    // Process confirmation link
-    @RequestMapping(value = ["/confirm"], method = arrayOf(RequestMethod.POST))
-    fun processConfirmationForm(modelAndView: ModelAndView, bindingResult: BindingResult, @RequestParam requestParams: Map<*, *>, redir: RedirectAttributes): ModelAndView {
-
-        modelAndView.viewName = "confirm"
-
-        val passwordCheck = Zxcvbn()
-
-        val strength = passwordCheck.measure(requestParams["password"] as String?)
-
-        if (strength.getScore() < 3) {
-            bindingResult.reject("password")
-
-            redir.addFlashAttribute("errorMessage", "Your password is too weak.  Choose a stronger one.")
-
-            modelAndView.viewName = "redirect:confirm?token=" + requestParams["token"]
-            println(requestParams["token"])
-            return modelAndView
-        }
-
-        // Find the user associated with the reset token
-        val user = userService.findByConfirmationToken(requestParams["token"] as String).get()
-
-        // Set new password
-        user.password = bCryptPasswordEncoder.encode(requestParams["password"] as CharSequence?)
-
-        // Set user to enabled
-        user.enabled = true
-
-        // Save user
-        userService.saveUser(user)
-
-        modelAndView.addObject("successMessage", "Your password has been set!")
-        return modelAndView
-    }
+//
+//        // Set user to enabled
+//        user.enabled = true
+//
+//        // Save user
+//        userService.saveUser(user)
+//
+//        modelAndView.addObject("successMessage", "Your password has been set!")
+//        return modelAndView
+//    }
+//
 
 }
 

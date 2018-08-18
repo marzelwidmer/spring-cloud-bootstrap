@@ -38,11 +38,7 @@
                     <small>Terms and Conditions</small>
                 </a></li>
                 <li><a href="#step-4">Step 4<br/>
-                    <small>Finish Registration</small>
-                </a></li>
-
-                <li><a href="#step-5">Step 5<br/>
-                    <small>Activate Account</small>
+                    <small>Finish</small>
                 </a></li>
             </ul>
 
@@ -157,7 +153,7 @@
 
                     <div id="form-step-3" role="form" data-toggle="validator">
                         <p>
-                            Please press the Register button to submit your registration.
+                            Please press the Register button to submit your registration. We will send you a verification email.
                         </p>
                         <div class="form-group">
                             <div th:if="${confirmationMessage}" class="alert alert-success" role="alert" th:text=${confirmationMessage}></div>
@@ -165,20 +161,6 @@
                             <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
                         </div>
                     </div>
-                </div>
-
-
-                <!--  Confirm Registation -->
-                <div id="step-5">
-
-                    <h2>Activate Account</h2>
-
-                    <div id="form-step-4" role="form" data-toggle="validator">
-                        <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text=${successMessage}></div>
-                        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text=${errorMessage}></div>
-                        <div th:if="${invalidToken}" class="alert alert-danger" role="alert" th:text=${invalidToken}></div>
-                    </div>
-
                 </div>
             </div>
         </div>

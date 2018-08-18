@@ -1,6 +1,8 @@
+/*
 $.getScript('js/zxcvbn/zxcvbn.js', function () {
     //password strength estimation script is loaded
 });
+*/
 
 $(document).ready(function () {
 
@@ -23,7 +25,7 @@ $(document).ready(function () {
         cycleSteps: false, // Allows to cycle the navigation of steps
         backButtonSupport: true, // Enable the back button support
         useURLhash: true, // Enable selection of the step based on url hash
-        hiddenSteps: $('.foo').foo(), // an array of step numbers to show as disabled
+        // hiddenSteps: $('.foo').foo(), // an array of step numbers to show as disabled
         showStepURLhash: false, //Show url hash based on step
         lang: {  // Language variables
             next: 'Next',
@@ -32,33 +34,9 @@ $(document).ready(function () {
         toolbarSettings: {
             toolbarPosition: 'bottom', // none, top, bottom, both
             toolbarButtonPosition: 'right', // left, right
-            showNextButton: true, // show/hide a Next button
-            showPreviousButton: true, // show/hide a Previous button
-            toolbarExtraButtons: [
-                $('<button type="submit"></button>').text('Registration')
-                    .addClass('btn btn-info')
-                    .on('click', function () {
-                        if (!$(this).hasClass('disabled')) {
-                            var elmForm = $("#myForm");
-                            if (elmForm) {
-                                elmForm.validator('validate');
-                                var elmErr = elmForm.find('.has-error');
-                                if (elmErr && elmErr.length > 0) {
-                                     return false;
-                                } else {
-                                     elmForm.submit();
-                                    return false;
-                                }
-                            }
-                        }
-                    }),
-                $('<button></button>').text('Reset')
-                    .addClass('btn btn-danger')
-                    .on('click', function () {
-                        $('#smartwizard').smartWizard("reset");
-                        $('#myForm').find("input, textarea").val("");
-                    })
-            ]
+            showNextButton: false, // show/hide a Next button
+            showPreviousButton: false, // show/hide a Previous button
+            // toolbarExtraButtons:
         },
         anchorSettings: {
             anchorClickable: true, // Enable/Disable anchor navigation
@@ -90,13 +68,13 @@ $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDir
             return false;
         }
 
-        // Password Validation on step 1 check again the password
+      /*  // Password Validation on step 1 check again the password
         if (stepNumber == 1) {
             var score = $('.foo').checkPasswordScore();
             if (score < 3) {
                 return false;
             }
-        }
+        }*/
     }
     return true;
 });
@@ -123,6 +101,7 @@ $("#smartwizard").on("beginReset", function (e) {
 $("#smartwizard").on("endReset", function (e) {
     // alert("endReset called");
 });
+/*
 
 $.fn.checkPasswordScore = function () {
     if ($("#inputPassword")) { // check if there a inputPassword
@@ -161,6 +140,7 @@ $(":checkbox").on("change", function () { // Here listening the changes on check
     }
 
 });
+*/
 
 
 

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Smart Wizard - a JavaScript jQuery Step Wizard plugin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Include Bootstrap CSS -->
+    <link th:href="@{//webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Include SmartWizard CSS -->
+    <link th:href="@{//webjars/smartwizard/dist/css/smart_wizard.css}" rel="stylesheet">
+
+    <!-- Optional SmartWizard theme -->
+    <link th:href="@{//webjars/smartwizard/dist/css/smart_wizard_theme_circles.css}" rel="stylesheet">
+    <link th:href="@{//webjars/smartwizard/dist/css/smart_wizard_theme_arrows.css}" rel="stylesheet">
+    <link th:href="@{//webjars/smartwizard/dist/css/smart_wizard_theme_dots.css}" rel="stylesheet">
+</head>
+<body>
+
+
+<div class="container">
+    <br/>
+
+    <!-- SmartWizard html -->
+    <div id="smartwizard">
+        <ul>
+            <li><a href="#confirmEmail">Activate Account<br/>
+                <small>Confirm email</small>
+            </a></li>
+        </ul>
+
+        <div>
+
+            <!--  Confirm Registation -->
+            <div id="confirmEmail">
+
+
+                <h2>Confirm Registation</h2>
+
+                <div th:if="${invalidToken}">
+                    <p>
+                        Registration is not complete!
+                    </p>
+                </div>
+                <div th:if="${confirmationToken}">
+                    <p>
+                        Registration Completed!
+                    </p>
+                    <label>First Name:</label>
+                    <span th:text=${user.firstName} ></span>
+                    <br/>
+                    <label>Last Name:</label>
+                    <span th:text=${user.lastName} ></span>
+                    <br/>
+                    <label>Email:</label>
+                    <span th:text=${user.email} ></span>
+                    <br/>
+                </div>
+
+                <div>
+                    <div class="help-block">
+                        <div th:if="${confirmationToken}" class="alert alert-success" role="alert" th:text=${confirmationToken}></div>
+                        <div th:if="${invalidToken}" class="alert alert-danger" role="alert" th:text=${invalidToken}></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Include jQuery -->
+<!--<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}" />-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+<!-- Include jQuery Validator plugin -->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>-->
+<!--<script th:src="@{/webjars/github-com-1000hz-bootstrap-validator/dist/validator.min.js}" />-->
+<script type="text/javascript" src="js/1000hz-bootstrap-validator/validator.min.js"></script>
+
+
+<!-- Include SmartWizard JavaScript source -->
+<!--<script th:src="@{/webjars/smartwizard/dist/js/jquery.smartWizard.min.js}" />-->
+<script type="text/javascript" src="js/smartWizard/jquery.smartWizard.min.js"></script>
+
+<script type="text/javascript" src="js/confirmRegistration.js"></script>
+
+
+</body>
+</html>
