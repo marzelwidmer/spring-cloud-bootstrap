@@ -1,68 +1,62 @@
-$(document).ready(function() {
-    $('#passwordForm')
-        .formValidation({
-            framework: 'bootstrap',
-            icon: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
-            },
-            fields: {
 
-                password: {
-                    validators: {
-                        notEmpty: {
-                            message: 'The password is required'
-                        },
-                        callback: {
-                            callback: function(value, validator, $field) {
-                                var password = $field.val();
-                                if (password == '') {
-                                    return true;
-                                }
+$(document).ready(function () {
 
-                                var result  = zxcvbn(password),
-                                    score   = result.score,
-                                    message = result.feedback.warning || 'The password is weak';
+    $.fn.foo = function () {
+        if($.urlParam('token')){
+            console.log("Token available enable only Acivate Account step.");
+            return [0,1,2,3]
+        }else {
+            console.log("No token available disable Activate Account step.");
+            return [4]
+        }
 
-                                // Update the progress bar width and add alert class
-                                var $bar = $('#strengthBar');
-                                switch (score) {
-                                    case 0:
-                                        $bar.attr('class', 'progress-bar progress-bar-danger')
-                                            .css('width', '1%');
-                                        break;
-                                    case 1:
-                                        $bar.attr('class', 'progress-bar progress-bar-danger')
-                                            .css('width', '25%');
-                                        break;
-                                    case 2:
-                                        $bar.attr('class', 'progress-bar progress-bar-danger')
-                                            .css('width', '50%');
-                                        break;
-                                    case 3:
-                                        $bar.attr('class', 'progress-bar progress-bar-warning')
-                                            .css('width', '75%');
-                                        break;
-                                    case 4:
-                                        $bar.attr('class', 'progress-bar progress-bar-success')
-                                            .css('width', '100%');
-                                        break;
-                                }
+    };
 
-                                // We will treat the password as an invalid one if the score is less than 3
-                                if (score < 3) {
-                                    return {
-                                        valid: false,
-                                        message: message
-                                    }
-                                }
-
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        });
+    // Smart Wizard Configuration
+    $('#smartwizard').smartWizard({
+        selected: 0,  // Initial selected step, 0 = first step
+        keyNavigation: true, // Enable/Disable keyboard navigation(left and right keys are used if enabled)
+        autoAdjustHeight: true, // Automatically adjust content height
+        cycleSteps: false, // Allows to cycle the navigation of steps
+        backButtonSupport: true, // Enable the back button support
+        useURLhash: true, // Enable selection of the step based on url hash
+        // hiddenSteps: $('.foo').foo(), // an array of step numbers to show as disabled
+        showStepURLhash: false, //Show url hash based on step
+        lang: {  // Language variables
+            next: 'Next',
+            previous: 'Previous'
+        },
+        toolbarSettings: {
+            toolbarPosition: 'bottom', // none, top, bottom, both
+            toolbarButtonPosition: 'right', // left, right
+            showNextButton: false, // show/hide a Next button
+            showPreviousButton: false, // show/hide a Previous button
+            // toolbarExtraButtons:
+        },
+        anchorSettings: {
+            anchorClickable: true, // Enable/Disable anchor navigation
+            enableAllAnchors: false, // Activates all anchors clickable all times
+            markDoneStep: true, // add done css
+            enableAnchorOnDoneStep: true // Enable/Disable the done steps navigation
+        },
+        contentURL: null, // content url, Enables Ajax content loading. can set as data data-content-url on anchor
+        disabledSteps: [],    // Array Steps disabled
+        errorSteps: [],    // Highlight step with errors
+        theme: 'arrows', //dots
+        transitionEffect: 'fade', // Effect on navigation, none/slide/fade
+        transitionSpeed: '400'
+    });
 });
+
+
+
+
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+        return null;
+    }
+    else{
+        return decodeURI(results[1]) || 0;
+    }
+}

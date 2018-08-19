@@ -51,29 +51,8 @@ fun main(args: Array<String>) {
 class WebConfig : WebMvcConfigurer {
 
     override fun addViewControllers(registry: ViewControllerRegistry) {
-
         registry.addViewController("/registration").setViewName("/registration")
-
-
-
-
-        registry.addViewController("/foo").setViewName("/foo")
-        registry.addViewController("/wizard").setViewName("/wizard")
-
-
-
-        registry.addViewController("/sign-up").setViewName("/sign-up")
-        registry.addViewController("/sign-in").setViewName("/sign-in")
-        registry.addViewController("/user-info").setViewName("/user-info")
-
-
-        registry.addViewController("/register").setViewName("/register")
         registry.addViewController("/confirm").setViewName("/confirm")
-
-
-        registry.addViewController("/login").setViewName("/login")
-        registry.addViewController("/admin").setViewName("/admin")
-
     }
 }
 
@@ -93,7 +72,6 @@ data class User(
         var email: String = "",
 
         @Column(name = "password")
-        @Transient
         var password: String = "",
 
         @Column(name = "first_name")
@@ -189,6 +167,10 @@ class RegisterController(
             // Generate random 36-character string token for confirmation link
             user.confirmationToken = UUID.randomUUID().toString()
 
+            // Set new password
+            user.password = bCryptPasswordEncoder.encode(user.password)
+
+            // Save User in Database
             userService.saveUser(user)
 
             val appUrl = "${request.scheme}://${request.serverName}:${request.serverPort}"
@@ -197,7 +179,7 @@ class RegisterController(
             registrationEmail.setTo(user.email)
             registrationEmail.setSubject("Verify Your Account")
             registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
-                    + appUrl + "/confirmRegistration?token=" + user.confirmationToken)
+                    + appUrl + "/confirm?token=" + user.confirmationToken)
             registrationEmail.setFrom("noreply@domain.com")
 
             emailService.sendEmail(registrationEmail)
@@ -209,13 +191,19 @@ class RegisterController(
         return modelAndView
 
     }
+}
 
 
-    @GetMapping("/confirmRegistration")
+@Controller
+class ConfirmrController(
+        private val userService: UserService
+) {
+
+    @GetMapping("/confirm")
     fun showConfirmationPage(@RequestParam(value = "token") token: String, modelAndView: ModelAndView, user: User): ModelAndView {
 
 
-        modelAndView.viewName = "confirmRegistration"
+        modelAndView.viewName = "confirm"
         // Find the user associated with the reset token
         val user = userService.findByConfirmationToken(token)
 
@@ -232,10 +220,43 @@ class RegisterController(
         } else {// No token found in DB
             modelAndView.addObject("invalidToken", "Oops!  This is an invalid confirmation link.")
         }
-
         return modelAndView
-
     }
+}
+
+
+@Configuration
+@EnableWebSecurity
+class WebSecurityConfig constructor(val userDetailsService: UserDetailsService) : WebSecurityConfigurerAdapter() {
+
+    override fun configure(auth: AuthenticationManagerBuilder) {
+        auth.userDetailsService(userDetailsService)
+    }
+//    override fun configure(http: HttpSecurity) {
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/js/**", "/css/**", "/img/**", "/webjars/**").permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .permitAll()
+//    }
+
+    @Throws(Exception::class)
+    override fun configure(http: HttpSecurity) {
+        // https://stackoverflow.com/questions/48902706/spring-cloud-eureka-with-spring-security/
+        http.csrf().disable()
+                .authorizeRequests()
+                .anyRequest().permitAll()
+        //H2 database console runs inside a frame, So we need to disable X-Frame-Options
+        http.headers().frameOptions().disable()
+    }
+}
+
 
 
 
@@ -316,7 +337,7 @@ class RegisterController(
 //        return modelAndView
 //    }
 
-    // Process confirmation link
+// Process confirmation link
 //    @RequestMapping(value = ["/confirm"], method = arrayOf(RequestMethod.GET))
 //    fun showConfirmationPage(modelAndView: ModelAndView, @RequestParam("token") token: String): ModelAndView {
 //
@@ -332,7 +353,7 @@ class RegisterController(
 //        return modelAndView
 //    }
 
-    // Process confirmation link
+// Process confirmation link
 //    @RequestMapping(value = ["/confirm"], method = arrayOf(RequestMethod.POST))
 //    fun processConfirmationForm(modelAndView: ModelAndView, bindingResult: BindingResult, @RequestParam requestParams: Map<*, *>, redir: RedirectAttributes): ModelAndView {
 //
@@ -369,37 +390,6 @@ class RegisterController(
 //    }
 //
 
-}
-
-@Configuration
-@EnableWebSecurity
-class WebSecurityConfig constructor(val userDetailsService: UserDetailsService) : WebSecurityConfigurerAdapter() {
-
-    override fun configure(auth: AuthenticationManagerBuilder) {
-        auth.userDetailsService(userDetailsService)
-    }
-//    override fun configure(http: HttpSecurity) {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/js/**", "/css/**", "/img/**", "/webjars/**").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .permitAll()
-//    }
-
-    @Throws(Exception::class)
-    override fun configure(http: HttpSecurity) {
-        // https://stackoverflow.com/questions/48902706/spring-cloud-eureka-with-spring-security/
-        http.csrf().disable()
-                .authorizeRequests()
-                .anyRequest().permitAll()
-    }
-}
 
 
 //

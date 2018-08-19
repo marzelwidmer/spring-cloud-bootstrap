@@ -24,11 +24,21 @@ spring:
       mail.smtp.auth : true
       mail.smtp.starttls.enable : true
 
+  h2.console.enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+
+
 server:
   port: 8063
 
-
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 ---
 # No Spring Cloud Infrastructure is needed

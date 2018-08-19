@@ -35,7 +35,7 @@ $(document).ready(function () {
             showNextButton: true, // show/hide a Next button
             showPreviousButton: true, // show/hide a Previous button
             toolbarExtraButtons: [
-                $('<button type="submit"></button>').text('Registration')
+                $('<button type="submit"></button>').text('Finish')
                     .addClass('btn btn-info')
                     .on('click', function () {
                         if (!$(this).hasClass('disabled')) {
