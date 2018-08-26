@@ -1,6 +1,5 @@
 spring:
-  profiles.include:
-  - unsecure
+
   jackson:
     default-property-inclusion: non_null
 
@@ -8,9 +7,19 @@ spring:
     user:
       name: admin
       password: password
-      roles: ACTUATOR
 
+security:
+  oauth2:
+    client:
+      client-id: clientId
+      client-secret: clientSecret
+      access-token-uri: http://localhost:6969/oauth/token
+      user-authorization-uri: http://localhost:6969/oauth/authorize
 
+    resource:
+      user-info-uri: /me
+      prefer-token-info: true
+      jwk.key-set-uri: /token_keys
 server:
   port: 6969
 
